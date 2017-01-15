@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+    <title>Band Mom</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+    <div class="loader hide"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <header class="jumbotron col-lg-12 col-md-12 col-s-12 col-xs-12">
+                <!-- Button that toggles the navbar on and off on small screens -->
+                <button type="button" class="btn navbar-toggle collapsed pull-right" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                    aria-expanded="false">
+                    <!-- Hides information from screen readers -->
+                    <span class="sr-only"></span>
+                    <!-- Icon for navbar button when in small mode -->
+                    <span class="glyphicon glyphicon-align-justify"></span>
+                </button>
+                <img src="images/bm-logo-2.jpeg" id="bmLogo" class="img-circle pull-left" alt="Band Mom Logo">
+                <span id="websiteTitle" class="pull-left">Band Mom</span>
+                <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Log In <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <form class="navbar-form navbar-right" role="search">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="email">
+                                        <input type="text" class="form-control" placeholder="password">
+                                    </div>
+                                    <button type="submit" class="btn btn-default">log in</button>
+                                </form>
+                            </ul>
+                        </li>
+                        <li><a href="/signup.html" class="link">Sign Up</a></li>
+                    </ul>
+                </div>
+            </header>
+        </div>
+    </div>
+    <div class="container">
+        <p id="websiteSlogan">Become the most organized band in town!</p>
+        <!-- Carousel -->
+        <!-- Surround everything with a div with the class carousel slide -->
+        <div id="theCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Define how many slides to put in the carousel -->
+            <ol class="carousel-indicators">
+                <li data-target="#theCarousel" data-slide-to="0" class="active"> </li>
+                <li data-target="#theCarousel" data-slide-to="1"> </li>
+                <li data-target="#theCarousel" data-slide-to="2"> </li>
+            </ol>
+            <!-- Define the text to place over the image -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="slide slide1"></div>
+                    <div class="carousel-caption">
+                        <h1>Guided Planning</h1>
+                        <p>Step by step instructions</p>
+                        <p><a href="#" class="btn btn-primary join-btn">Join Now</a></p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="slide slide2"></div>
+                    <div class="carousel-caption">
+                        <h1>Save Your Stage Plot</h1>
+                        <p>It will be here when you need it!</p>
+                        <p><a href="#" class="btn btn-primary join-btn">Join Now</a></p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="slide slide3"></div>
+                    <div class="carousel-caption">
+                        <h1>List the Gear You Need</h1>
+                        <p>Organize Your Purchases</p>
+                        <p><a href="#" class="btn btn-primary join-btn">Join Now</a></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Set the actions to take when the arrows are clicked -->
+            <a class="left carousel-control" href="#theCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"> </span>
+            </a>
+            <a class="right carousel-control" href="#theCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+        <!-- <button type="submit" class="btn btn-lg sign-up-button js-sign-up-button">sign up</button>-->
+        <h5>Already have an account? <a href="/login.html">log in</a>
+        </h5>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>

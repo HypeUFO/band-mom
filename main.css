@@ -1,0 +1,192 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 62.5%;
+    padding-top: 0px;
+    /*background-color: #2E2D88;*/
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+#bmLogo {
+    height: 60px;
+    width: 60px;
+    margin-top: 12px;
+}
+
+#websiteTitle {
+    font-size: 10em;
+    vertical-align: middle;
+    font-family: 'Pacifico', cursive;
+    padding-left: 15px;
+    color: white;
+}
+
+#websiteSlogan {
+    font-size: 5.4em;
+    color: #2E2D88
+}
+
+.jumbotron {
+    text-align: left;
+    background-color: #2E2D88;
+    color: white;
+    background-size: cover;
+    padding: 2em;
+}
+
+.link {
+    float: right;
+    margin-right: 20px;
+    margin-top: 25px;
+    height: 100%;
+    font-size: 4em;
+    color: white;
+}
+
+span.glyphicon-align-justify {
+    font-size: 3em;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 0px;
+    height: 100%;
+    width: 90%;
+    background: white;
+}
+
+
+/* Carousel Styling */
+
+.slide {
+    height: 350px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    
+}
+
+.slide1 {
+    background-image: url('images/music-planning.jpeg');
+    -webkit-filter: brightness(0.5);
+  -moz-filter: brightness(0.5);
+  -o-filter: brightness(0.5);
+  -ms-filter: brightness(0.5);
+  filter: brightness(0.5);
+}
+
+.slide2 {
+    background-image: url('images/stage-plot.jpeg');
+    -webkit-filter: brightness(0.5);
+  -moz-filter: brightness(0.5);
+  -o-filter: brightness(0.5);
+  -ms-filter: brightness(0.5);
+  filter: brightness(0.5);
+}
+
+.slide3 {
+    background-image: url('images/gear.jpeg');
+    -webkit-filter: brightness(0.5);
+  -moz-filter: brightness(0.5);
+  -o-filter: brightness(0.5);
+  -ms-filter: brightness(0.5);
+  filter: brightness(0.5);
+}
+
+.carousel-caption {
+    color: white;
+    text-shadow: 2px 1px 2px #2E2D88;
+}
+
+.carousel-caption h1 {
+    font-size: 7em;
+    font-family: 'Pacifico', cursive;
+    padding-bottom: .4em;
+}
+
+.carousel-caption p {
+    font-size: 3em;
+    padding-bottom: .4em;
+}
+
+
+/*
+.sign-up-section {
+    width: 300px;
+    margin: 3% auto 0;
+    padding: 10px;
+    color: white;
+    background-color: #2E2D88;
+    height: auto;
+    border-radius: 10px;
+}
+
+.sign-up-form {
+    margin: 0 auto;
+    margin-top: 35px;
+}
+
+input {
+    margin: 1px;
+    border: 1px solid gray;
+    width: 85%;
+    height: 30px;
+}
+
+input[type="text"] {
+    padding-left: 6px;
+    color: gray;
+    font-size: 2.5em;
+}
+*/
+
+.sign-up-button {
+    margin: 10px;
+    background: white;
+    color: #2E2D88;
+    font-weight: bold;
+    border: 3px solid gray;
+}
+
+.sign-up-button:hover {
+    box-shadow: 2px 2px 5px black;
+}
+
+.sign-up-button:active {
+    transform: translateY(1px);
+}
+
+.join-btn {
+    background-color: #2E2D88;
+    border: 1px solid white;
+}
+
+h5 {
+    margin-top: 18px;
+    font-size: 18px;
+}
+
+.hide {
+    display: none;
+}
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.9;
+    background: url('images/page-loader.gif') 50% 50% no-repeat rgb(249, 249, 249);
+}
