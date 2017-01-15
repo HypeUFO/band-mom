@@ -175,6 +175,14 @@ h5 {
     margin-top: 18px;
     font-size: 18px;
 }
+.modal {
+    margin-top: 8%;
+}
+
+.modal-header {
+    color: #2E2D88;
+    text-align: center;
+}
 
 .hide {
     display: none;

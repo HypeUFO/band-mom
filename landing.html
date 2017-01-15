@@ -41,7 +41,34 @@
                                 </form>
                             </ul>
                         </li>
-                        <li><a href="/signup-modal.html" class="link">Sign Up</a></li>
+                        <li>
+                            <!-- Button HTML (to Trigger Modal) -->
+                            <a href="#myModal" role="button" class="btn btn-large btn-primary link" data-toggle="modal">Sign Up</a>
+                            <!-- Modal HTML -->
+                            <div id="myModal" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Sign Up</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="first name">
+                                                <input type="text" class="form-control" placeholder="last name">
+                                                <input type="text" class="form-control" placeholder="email">
+                                                <input type="text" class="form-control" placeholder="password">
+                                                <input type="text" class="form-control" placeholder="confirm password">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Sign Up</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </header>
