@@ -73,34 +73,33 @@ span.glyphicon-align-justify {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    
-}
+    }
 
 .slide1 {
     background-image: url('images/music-planning.jpeg');
-    -webkit-filter: brightness(0.5);
-  -moz-filter: brightness(0.5);
-  -o-filter: brightness(0.5);
-  -ms-filter: brightness(0.5);
-  filter: brightness(0.5);
+    -webkit-filter: brightness(0.6);
+    -moz-filter: brightness(0.6);
+    -o-filter: brightness(0.6);
+    -ms-filter: brightness(0.6);
+    filter: brightness(0.6);
 }
 
 .slide2 {
     background-image: url('images/stage-plot.jpeg');
-    -webkit-filter: brightness(0.5);
-  -moz-filter: brightness(0.5);
-  -o-filter: brightness(0.5);
-  -ms-filter: brightness(0.5);
-  filter: brightness(0.5);
+    -webkit-filter: brightness(0.6);
+    -moz-filter: brightness(0.6);
+    -o-filter: brightness(0.6);
+    -ms-filter: brightness(0.6);
+    filter: brightness(0.6);
 }
 
 .slide3 {
     background-image: url('images/gear.jpeg');
-    -webkit-filter: brightness(0.5);
-  -moz-filter: brightness(0.5);
-  -o-filter: brightness(0.5);
-  -ms-filter: brightness(0.5);
-  filter: brightness(0.5);
+    -webkit-filter: brightness(0.6);
+    -moz-filter: brightness(0.6);
+    -o-filter: brightness(0.6);
+    -ms-filter: brightness(0.6);
+    filter: brightness(0.6);
 }
 
 .carousel-caption {
@@ -166,6 +165,10 @@ input[type="text"] {
     transform: translateY(1px);
 }
 
+.form-group {
+    margin-right: 15px;
+}
+
 .join-btn {
     background-color: #2E2D88;
     border: 1px solid white;
@@ -175,6 +178,7 @@ h5 {
     margin-top: 18px;
     font-size: 18px;
 }
+
 .modal {
     margin-top: 8%;
 }
@@ -182,6 +186,10 @@ h5 {
 .modal-header {
     color: #2E2D88;
     text-align: center;
+}
+
+.table {
+    font-size: 24px;
 }
 
 .hide {

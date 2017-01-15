@@ -92,7 +92,7 @@
                     <div class="carousel-caption">
                         <h1>Guided Planning</h1>
                         <p>Step by step instructions</p>
-                        <p><a href="#" class="btn btn-primary join-btn">Join Now</a></p>
+                        <p><a href="#myModal" data-toggle="modal" class="btn btn-primary join-btn">Join Now</a></p>
                     </div>
                 </div>
                 <div class="item">
@@ -100,7 +100,7 @@
                     <div class="carousel-caption">
                         <h1>Save Your Stage Plot</h1>
                         <p>It will be here when you need it!</p>
-                        <p><a href="#" class="btn btn-primary join-btn">Join Now</a></p>
+                        <p><a href="#myModal" data-toggle="modal" class="btn btn-primary join-btn">Join Now</a></p>
                     </div>
                 </div>
                 <div class="item">
@@ -108,7 +108,7 @@
                     <div class="carousel-caption">
                         <h1>List the Gear You Need</h1>
                         <p>Organize Your Purchases</p>
-                        <p><a href="#" class="btn btn-primary join-btn">Join Now</a></p>
+                        <p><a href="#myModal" data-toggle="modal" class="btn btn-primary join-btn">Join Now</a></p>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,28 @@
             </a>
         </div>
         <!-- <button type="submit" class="btn btn-lg sign-up-button js-sign-up-button">sign up</button>-->
-        <h5>Already have an account? <a href="/login.html">log in</a>
+        <h5>Already have an account? <a href="#myModal1" role="button" data-toggle="modal">Log in</a>
+                            <!-- Modal HTML -->
+                            <div id="myModal1" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Log In</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="email">
+                                                <input type="text" class="form-control" placeholder="password">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Log In</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
         </h5>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
