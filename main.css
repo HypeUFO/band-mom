@@ -49,7 +49,7 @@ body {
     margin-right: 20px;
     margin-top: 25px;
     height: 100%;
-    font-size: 4em;
+    font-size: 3em;
     color: white;
 }
 
@@ -188,8 +188,47 @@ h5 {
     text-align: center;
 }
 
+#stage-plot {
+    padding: 50px;
+}
+
 .table {
     font-size: 24px;
+}
+
+.nav-tabs {
+    font-size: 18px;
+}
+
+.upload-btn {
+    margin: 10px;
+    background: #2E2D88;
+    color: white;
+    font-weight: bold;
+    border: 1px solid white;
+}
+
+.upload-btn:hover {
+    box-shadow: 2px 2px 5px black;
+    background-color: #3E2D88;
+}
+
+.upload-btn:active {
+    transform: translateY(1px);
+}
+
+.add-event-btn {
+    background-color: #2E2D88;
+    border: 1px solid white;
+}
+
+.add-event-btn:hover {
+    box-shadow: 2px 2px 5px black;
+    background-color: #3E2D88;
+}
+
+.add-event-btn:active {
+    transform: translateY(1px);
 }
 
 .hide {
