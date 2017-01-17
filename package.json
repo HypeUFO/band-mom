@@ -1,0 +1,28 @@
+{
+  "name": "capstone-2",
+  "version": "1.0.0",
+  "description": "capstone 2 for Thinkful fullstack program. App for bands to organize gigs. Either called \"Band Mom\" or \"Roadie\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HypeUFO/capstone-2.git"
+  },
+  "author": "Michael Maio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HypeUFO/capstone-2/issues"
+  },
+  "homepage": "https://github.com/HypeUFO/capstone-2#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.2.0"
+  }
+}
