@@ -84,6 +84,8 @@ const MOCK_USERS = {
     }]
 };
 
+// GET USER EVENTS ON LOGIN
+
 // this function's name and argument can stay the
 // same after we have a live API, but its internal
 // implementation will change. Instead of using a
@@ -116,10 +118,30 @@ function displayEvents(data) {
 // are connecting to real API
 function getAndDisplayEvents() {
 	getEvents(displayEvents);
+
 }
+
+// LOGIN BUTTON LINKS TO DASHBOARD
+
+const handleLogin = function() {
+$('.btn-login').click(function()
+{
+    window.location.href = "dashboard.html";
+})
+};
+
+const handleSignUp = function() {
+$('.btn-signup').click(function()
+{
+    window.location.href = "dashboard.html";
+})
+};
+
 
 
 //  on page load do this
-$(function() {
+$(document).ready(function() {
+    handleLogin();
+    handleSignUp();
 	getAndDisplayEvents();
-})
+});
