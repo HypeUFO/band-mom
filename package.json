@@ -14,9 +14,8 @@
   "author": "Michael Maio",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/HypeUFO/capstone-2/issues"
+    "url": "https://github.com/HypeUFO/capstone-2"
   },
-  "homepage": "https://github.com/HypeUFO/capstone-2#readme",
   "dependencies": {
     "express": "^4.14.0"
   },
