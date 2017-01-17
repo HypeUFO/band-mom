@@ -18,3 +18,14 @@ describe ('index page', function(){
         });
     });
 });
+
+describe ('dashboard page', function(){
+    it ('should load', function(){
+        return chai.request(app)
+        .get('/dashboard')
+        .then(function(res){
+            res.should.have.status(200);
+            res.should.be.html;
+        });
+    });
+});
