@@ -196,8 +196,18 @@ h5 {
     padding: 50px;
 }
 
+#stage-plot-img {
+    margin-bottom: 12px;
+}
+
+#inputFileToLoad {
+    margin: auto;
+    padding: 10px;
+    font-size: 12px;
+}
+
 .table {
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .nav-tabs {
