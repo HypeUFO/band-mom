@@ -81,6 +81,18 @@ const MOCK_USERS = {
     }]
 };
 
+// Stage PLOT
+/*
+const STAGE_PLOT = {
+    stagePlots = [{
+        "userId": "333333",
+        "file": "images/stage-plot.jpeg",
+        "dateCreated": "January 12, 2017",
+        "dateModified": "January 16, 2017"
+    }]
+};
+*/
+
 // NEW EVENT SETUP GUIDE
 
 const QUESTIONS = {
@@ -98,7 +110,8 @@ const QUESTIONS = {
         question: "What time is sound check?",
     }, {
         question: "Is there anything you need to purchase before the event?",
-        answer: [{
+        isMultiLine: true,
+        options: [{
             name: "quarter inch cables",
             quantity: ""
         }, {
@@ -116,39 +129,74 @@ const QUESTIONS = {
         question: "Are there any notes you want to add?",
     }]
 };
-/*
-function doGuide() {
-    
-}*/
+
+function renderOptionsHTML(question) {
+    var questionHtml = `<h3>${question.question}</h3>`;
+    for (index in question.options) {
+        var prompt = `<div class="form-group">
+        <label for="name">${question.options[index].name}</label>
+        <div class="dec btn btn-primary up-down-btn">-</div>
+        <input type="text" id="${question.options[index].name}" value="0">
+    <div class="inc btn btn-primary up-down-btn">+</div></div>`;
+        questionHtml += prompt;
+    }
+    $('#event-guide-form').html(questionHtml);
+    handleQty();
+};
+
+
+//
+function handleQty() {
+    $(".up-down-btn").on("click", function() {
+
+  var $button = $(this);
+  var oldValue = $button.parent().find("input").val();
+
+  if ($button.text() == "+") {
+	  var newVal = parseFloat(oldValue) + 1;
+	} else {
+   // Don't allow decrementing below zero
+    if (oldValue > 0) {
+      var newVal = parseFloat(oldValue) - 1;
+    } else {
+      newVal = 0;
+    }
+  }
+
+  $button.parent().find("input").val(newVal);
+
+});
+};
+
+function renderQuestionHTML(question) {
+    var questionHtml = `<h3>${question.question}</h3>`;
+    var prompt = `<input type="text" class="form-control user-event-input" placeholder="">`;
+    questionHtml += prompt;
+    $('#event-guide-form').html(questionHtml);
+};
 
 function renderNextQuestion() {
-    $('.btn-guide-next').on('click', function (event) {
-        if (QUESTIONS.currentQuestion < QUESTIONS.questions.length && QUESTIONS.currentQuestion > 0) {
+    $('.btn-guide-next').on('click', function () {
+        if (QUESTIONS.currentQuestion === QUESTIONS.questions.length - 1) {
+            $('.btn-guide-next').addClass('hide');
+            $('.btn-save').removeClass('hide');
+        }
+        var question = QUESTIONS.questions[QUESTIONS.currentQuestion];
+        if (QUESTIONS.currentQuestion !== 0) {
             QUESTIONS.manifest.push($('.user-event-input').val());
-            var question = QUESTIONS.questions[QUESTIONS.currentQuestion];
-            var questionHtml = `<h3>${question.question}</h3><form class="form-field" name="answerList">`;
-            var prompt = `<input type="text" class="form-control user-event-input" placeholder="">`;
-            questionHtml += prompt;
-            questionHtml += `</form>`;
-            $('#event-guide-form').html(questionHtml);
-        } else if (QUESTIONS.currentQuestion === 0) {
-            var question = QUESTIONS.questions[QUESTIONS.currentQuestion];
-            var questionHtml = `<h3>${question.question}</h3><form class="form-field" name="answerList">`;
-            var prompt = `<input type="text" class="form-control user-event-input" placeholder="">`;
-            questionHtml += prompt;
-            questionHtml += `</form>`;
-            $('#event-guide-form').html(questionHtml);
+        }
+        if (question.options) {
+            renderOptionsHTML(question);
+        } else {
+            renderQuestionHTML(question);
         }
         QUESTIONS.currentQuestion++;
-
-        //evalProgress();
-        //createProgressTemplate();
     });
 }
 
-function renderEvent() {
-    $('.btn-guide-next').on('click', function () {
-        if (QUESTIONS.currentQuestion > QUESTIONS.questions.length) {
+function renderNewEvent() {
+    $('.btn-save').on('click', function () {
+        if (QUESTIONS.currentQuestion === QUESTIONS.questions.length) {
             $('table').append(
                 `<tr>
                 <td> ${QUESTIONS.manifest[0]} </td>
@@ -161,15 +209,32 @@ function renderEvent() {
             $('#eventGuideModal').modal('hide');
             QUESTIONS.manifest = [];
             QUESTIONS.currentQuestion = 0;
+            $('.btn-guide-next').removeClass('hide');
+            $('.btn-save').addClass('hide');
         }
     });
 }
 
+function loadImageFileAsURL() {
+    var filesSelected = document.getElementById("inputFileToLoad").files;
+    if (filesSelected.length > 0) {
+        var fileToLoad = filesSelected[0];
 
+        if (fileToLoad.type.match("image.*")) {
+            var fileReader = new FileReader();
+            fileReader.onload = function (fileLoadedEvent) {
+                var imageLoaded = document.getElementById("stage-plot-img")
+                imageLoaded.src = fileLoadedEvent.target.result;
+                document.body.append(imageLoaded.src);
+            };
+            fileReader.readAsDataURL(fileToLoad);
+        };
+    };
+};
 
-
-
-
+$('.btn-plot-save').on('click', function () {
+    $('#upload-plot-modal').modal('hide');
+});
 
 
 // GET USER EVENTS ON LOGIN
@@ -211,6 +276,35 @@ function getAndDisplayEvents() {
 
 }
 
+
+
+// GET STAGE PLOT AT LOGIN
+/*
+function getStagePlots(callbackFn) {
+    // we use a `setTimeout` to make this asynchronous
+    // as it would be with a real AJAX call.
+    setTimeout(function () {
+        callbackFn(STAGE_PLOT)
+    }, 1);
+}
+
+// this function stays the same when we connect
+// to real API later
+function displayStagePlots(data) {
+    for (index in data.stagePlots) {
+
+        $('#stage-plot-img').append(
+            `<img src="$${data.stagePlots[index].file} id="stage-plot-img">`
+        );
+    };
+};
+
+function getAndDisplayStagePlots() {
+    getStagePlots(displayStagePlots);
+
+}
+*/
+
 // LOGIN BUTTON LINKS TO DASHBOARD
 
 const handleLogin = function () {
@@ -233,5 +327,5 @@ $(document).ready(function () {
     handleSignUp();
     getAndDisplayEvents();
     renderNextQuestion();
-    renderEvent();
+    renderNewEvent();
 });

@@ -179,6 +179,10 @@ h5 {
     font-size: 18px;
 }
 
+.manifest-options {
+    font-size: 18px;
+}
+
 .modal {
     margin-top: 8%;
 }
@@ -230,6 +234,44 @@ h5 {
 .add-event-btn:active {
     transform: translateY(1px);
 }
+
+#event-guide-form {
+    margin: 50px 0 0 0;
+}
+
+label {
+  font: bold 20px Helvetica, sans-serif;
+  display: block;
+  float: left;
+  text-align: right;
+  padding: 5px 10px 0 0;
+  width: 140px;
+}
+input[type=text] {
+  float: left;
+  width: auto;
+  font: bold 20px Helvetica, sans-serif;
+  padding: 3px 0 0 0;
+  text-align: center;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#event-guide-form div {
+  overflow: hidden;
+  margin: 0 0 5px 0;
+}
+
+.up-down-btn {
+  float: left;
+  /*text-align: center;
+  background: url(../images/buttons.png) no-repeat;*/
+}
+/*
+.dec {
+  background-position: 0 -29px;
+}*/
+
 
 .hide {
     display: none;
