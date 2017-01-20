@@ -82,18 +82,22 @@ const MOCK_USERS = {
 };
 
 // Stage PLOT
-/*
+
 const STAGE_PLOT = {
-    stagePlots = [{
+    stagePlots: [{
         "userId": "333333",
         "file": "images/stage-plot.jpeg",
         "dateCreated": "January 12, 2017",
         "dateModified": "January 16, 2017"
     }]
 };
-*/
+
 
 // NEW EVENT SETUP GUIDE
+
+const NEW_EVENT = {
+
+};
 
 const QUESTIONS = {
     currentQuestion: 0,
@@ -134,12 +138,17 @@ function renderOptionsHTML(question) {
     var questionHtml = `<h3>${question.question}</h3>`;
     for (index in question.options) {
         var prompt = `<div class="form-group">
-        <label for="name">${question.options[index].name}</label>
+        <label for="${question.options[index].name}">${question.options[index].name}</label>
         <div class="dec btn btn-primary up-down-btn">-</div>
-        <input type="text" id="${question.options[index].name}" value="0">
-    <div class="inc btn btn-primary up-down-btn">+</div></div>`;
+        <input type="text" class="form-control user-event-input options-input" id="${question.options[index].name}" value="0">
+    <div class="inc btn btn-primary up-down-btn">+</div>`;
         questionHtml += prompt;
-    }
+        if (question.options[index].description) {
+            var promptMisc = `<label class="sub-label" for="description">description</label><input type="text" class="form-control user-event-input options-input sub-options-input" id="description" placeholder="item description"></div>`;
+            questionHtml += promptMisc;
+        };
+        questionHtml += `</div>`;
+    };
     $('#event-guide-form').html(questionHtml);
     handleQty();
 };
@@ -147,25 +156,25 @@ function renderOptionsHTML(question) {
 
 //
 function handleQty() {
-    $(".up-down-btn").on("click", function() {
+    $(".up-down-btn").on("click", function () {
 
-  var $button = $(this);
-  var oldValue = $button.parent().find("input").val();
+        var $button = $(this);
+        var oldValue = $button.parent().find("input").val();
 
-  if ($button.text() == "+") {
-	  var newVal = parseFloat(oldValue) + 1;
-	} else {
-   // Don't allow decrementing below zero
-    if (oldValue > 0) {
-      var newVal = parseFloat(oldValue) - 1;
-    } else {
-      newVal = 0;
-    }
-  }
+        if ($button.text() == "+") {
+            var newVal = parseFloat(oldValue) + 1;
+        } else {
+            // Don't allow decrementing below zero
+            if (oldValue > 0) {
+                var newVal = parseFloat(oldValue) - 1;
+            } else {
+                newVal = 0;
+            }
+        }
 
-  $button.parent().find("input").val(newVal);
+        $button.parent().find("input").val(newVal);
 
-});
+    });
 };
 
 function renderQuestionHTML(question) {
@@ -177,13 +186,13 @@ function renderQuestionHTML(question) {
 
 function renderNextQuestion() {
     $('.btn-guide-next').on('click', function () {
-        if (QUESTIONS.currentQuestion === QUESTIONS.questions.length - 1) {
+        if (QUESTIONS.currentQuestion === QUESTIONS.questions.length) {
             $('.btn-guide-next').addClass('hide');
             $('.btn-save').removeClass('hide');
         }
         var question = QUESTIONS.questions[QUESTIONS.currentQuestion];
         if (QUESTIONS.currentQuestion !== 0) {
-            QUESTIONS.manifest.push($('.user-event-input').val());
+            getNewEventData();
         }
         if (question.options) {
             renderOptionsHTML(question);
@@ -193,6 +202,23 @@ function renderNextQuestion() {
         QUESTIONS.currentQuestion++;
     });
 }
+
+
+
+function getNewEventData() {
+    var some = document.getElementsByClassName("user-event-input");
+
+    for (i in some) {
+        //extract the value of input elements
+        var singleVal = some[i].value;
+        if (singleVal !== "" && singleVal !== undefined) {
+            QUESTIONS.manifest.push(singleVal);
+        }
+    }
+    console.log(QUESTIONS.manifest);
+
+}
+//
 
 function renderNewEvent() {
     $('.btn-save').on('click', function () {
@@ -205,7 +231,8 @@ function renderNewEvent() {
                 <td> ${QUESTIONS.manifest[3]} </td>
                 <td> ${QUESTIONS.manifest[4]} </td>
             </tr>`);
-            console.log(QUESTIONS.manifest)
+            console.log(QUESTIONS.manifest);
+            saveNewEvent();
             $('#eventGuideModal').modal('hide');
             QUESTIONS.manifest = [];
             QUESTIONS.currentQuestion = 0;
@@ -215,27 +242,26 @@ function renderNewEvent() {
     });
 }
 
-function loadImageFileAsURL() {
-    var filesSelected = document.getElementById("inputFileToLoad").files;
-    if (filesSelected.length > 0) {
-        var fileToLoad = filesSelected[0];
-
-        if (fileToLoad.type.match("image.*")) {
-            var fileReader = new FileReader();
-            fileReader.onload = function (fileLoadedEvent) {
-                var imageLoaded = document.getElementById("stage-plot-img")
-                imageLoaded.src = fileLoadedEvent.target.result;
-                document.body.append(imageLoaded.src);
-            };
-            fileReader.readAsDataURL(fileToLoad);
-        };
+function saveNewEvent() {
+    NEW_EVENT.eventDate = QUESTIONS.manifest[0];
+    NEW_EVENT.venueName = QUESTIONS.manifest[1];
+    NEW_EVENT.venueAddress = QUESTIONS.manifest[2];
+    NEW_EVENT.startTime = QUESTIONS.manifest[3];
+    NEW_EVENT.soundCheckTime = QUESTIONS.manifest[4];
+    NEW_EVENT.manifest = {
+        "quarterInchCables": QUESTIONS.manifest[5],
+        "xlrCables": QUESTIONS.manifest[6],
+        "strings": QUESTIONS.manifest[7],
+        "misc": {
+            "qty": QUESTIONS.manifest[8],
+            "description": QUESTIONS.manifest[9]
+        }
     };
-};
-
-$('.btn-plot-save').on('click', function () {
-    $('#upload-plot-modal').modal('hide');
-});
-
+    NEW_EVENT.notes = QUESTIONS.manifest[15];
+    console.log(NEW_EVENT);
+    MOCK_EVENTS.events.push(NEW_EVENT);
+    console.log(MOCK_EVENTS);
+}
 
 // GET USER EVENTS ON LOGIN
 
@@ -276,10 +302,33 @@ function getAndDisplayEvents() {
 
 }
 
+// LOAD NEW STAGE PLOT
+
+function loadImageFileAsURL() {
+    var filesSelected = document.getElementById("inputFileToLoad").files;
+    if (filesSelected.length > 0) {
+        var fileToLoad = filesSelected[0];
+
+        if (fileToLoad.type.match("image.*")) {
+            var fileReader = new FileReader();
+            fileReader.onload = function (fileLoadedEvent) {
+                var imageLoaded = document.getElementById("stage-plot-img")
+                imageLoaded.src = fileLoadedEvent.target.result;
+                document.body.append(imageLoaded.src);
+            };
+            fileReader.readAsDataURL(fileToLoad);
+        };
+    };
+};
+
+$('.btn-plot-save').on('click', function () {
+    $('#upload-plot-modal').modal('hide');
+});
+
 
 
 // GET STAGE PLOT AT LOGIN
-/*
+
 function getStagePlots(callbackFn) {
     // we use a `setTimeout` to make this asynchronous
     // as it would be with a real AJAX call.
@@ -292,10 +341,9 @@ function getStagePlots(callbackFn) {
 // to real API later
 function displayStagePlots(data) {
     for (index in data.stagePlots) {
-
-        $('#stage-plot-img').append(
-            `<img src="$${data.stagePlots[index].file} id="stage-plot-img">`
-        );
+        var imageLoaded = document.getElementById("stage-plot-img")
+        imageLoaded.src = data.stagePlots[index].file;
+        document.body.append(imageLoaded.src);
     };
 };
 
@@ -303,7 +351,8 @@ function getAndDisplayStagePlots() {
     getStagePlots(displayStagePlots);
 
 }
-*/
+
+
 
 // LOGIN BUTTON LINKS TO DASHBOARD
 
@@ -319,12 +368,20 @@ const handleSignUp = function () {
     })
 };
 
+const handleLogout = function () {
+    $('.btn-logout').click(function () {
+        window.location.href = "index.html";
+    })
+};
+
 
 
 //  on page load do this
 $(document).ready(function () {
     handleLogin();
     handleSignUp();
+    handleLogout();
+    getAndDisplayStagePlots()
     getAndDisplayEvents();
     renderNextQuestion();
     renderNewEvent();
