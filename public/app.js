@@ -1,6 +1,4 @@
-// this is mock data, but when we create our API
-// we'll have it return data that looks like this
-
+// using mock data until API is created
 const MOCK_EVENTS = {
     "events": [{
         "venueName": "The Rainbow Room",
@@ -8,7 +6,16 @@ const MOCK_EVENTS = {
         "eventDate": "February 2, 2017",
         "startTime": "9:00",
         "soundCheckTime": "8:00",
-        "manifest": {},
+        "manifest": {
+            "quarterInchCables": "2",
+            "strings": "3",
+            "xlrCables": "1",
+            "misc": {
+                "description": "guitar strap",
+                "qty": "1"
+            }
+
+        },
         "userId": "111111" // The user id of the user that made the event
     }, {
         "venueName": "Loaded",
@@ -17,7 +24,7 @@ const MOCK_EVENTS = {
         "startTime": "8:00",
         "soundCheckTime": "7:00",
         "manifest": {},
-        "userId": "333333" // The user id of the user that made the event
+        "userId": "333333"
     }, {
         "venueName": "The Satellite",
         "venueAddress": "1717 Silver Lake Blvd Los Angeles, CA 90026",
@@ -25,15 +32,15 @@ const MOCK_EVENTS = {
         "startTime": "9:00",
         "soundCheckTime": "7:00",
         "manifest": {},
-        "userId": "222222" // The user id of the user that made the event
+        "userId": "222222"
     }, {
         "venueName": "The Rainbow Room",
         "venueAddress": "9015 W Sunset Blvd West Hollywood, CA 90069",
         "eventDate": "February 2, 2017",
         "startTime": "9:00",
-        "soundCheckTime": "8:00",
+        "soundCheckTime": "7:00",
         "manifest": {},
-        "userId": "444444" // The user id of the user that made the event
+        "userId": "444444"
     }]
 };
 
@@ -83,7 +90,7 @@ const MOCK_USERS = {
 
 // Stage PLOT
 
-const STAGE_PLOT = {
+const MOCK_STAGE_PLOT = {
     stagePlots: [{
         "userId": "333333",
         "file": "images/stage-plot.jpeg",
@@ -104,6 +111,7 @@ const QUESTIONS = {
     manifest: [],
     questions: [{
         question: "What is the date of the event?",
+        //mapToField: "eventDate"
     }, {
         question: "What is the venue name?",
     }, {
@@ -140,7 +148,7 @@ function renderOptionsHTML(question) {
         var prompt = `<div class="form-group">
         <label for="${question.options[index].name}">${question.options[index].name}</label>
         <div class="dec btn btn-primary up-down-btn">-</div>
-        <input type="text" class="form-control user-event-input options-input" id="${question.options[index].name}" value="0">
+        <input type="text" class="form-control user-event-input options-input qty-input" id="${question.options[index].name}" value="0">
     <div class="inc btn btn-primary up-down-btn">+</div>`;
         questionHtml += prompt;
         if (question.options[index].description) {
@@ -159,7 +167,7 @@ function handleQty() {
     $(".up-down-btn").on("click", function () {
 
         var $button = $(this);
-        var oldValue = $button.parent().find("input").val();
+        var oldValue = $button.parent().find(".qty-input").val();
 
         if ($button.text() == "+") {
             var newVal = parseFloat(oldValue) + 1;
@@ -172,7 +180,7 @@ function handleQty() {
             }
         }
 
-        $button.parent().find("input").val(newVal);
+        $button.parent().find(".qty-input").val(newVal);
 
     });
 };
@@ -208,9 +216,9 @@ function renderNextQuestion() {
 function getNewEventData() {
     var input = document.getElementsByClassName("user-event-input");
 
-    for (i in input) {
+    for (i of input) {
         //extract the value of input elements
-        var singleVal = input[i].value;
+        var singleVal = i.value;
         if (singleVal !== "" && singleVal !== undefined) {
             QUESTIONS.manifest.push(singleVal);
         }
@@ -258,9 +266,17 @@ function saveNewEvent() {
         }
     };
     NEW_EVENT.notes = QUESTIONS.manifest[15];
+    NEW_EVENT.userId = '111111';
     console.log(NEW_EVENT);
-    MOCK_EVENTS.events.push(NEW_EVENT);
-    console.log(MOCK_EVENTS);
+    //MOCK_EVENTS.events.push(NEW_EVENT);
+    //console.log(MOCK_EVENTS);
+    $.ajax({
+        type: "POST",
+        url: '/api/event',
+        data: NEW_EVENT,
+        //success: success,
+        //dataType: dataType
+    });
 }
 
 // GET USER EVENTS ON LOGIN
@@ -331,7 +347,7 @@ $('.btn-save-plot').on('click', function () {
 
 function getStagePlots(callbackFn) {
     setTimeout(function () {
-        callbackFn(STAGE_PLOT)
+        callbackFn(MOCK_STAGE_PLOT)
     }, 1);
 }
 
@@ -350,6 +366,36 @@ function getAndDisplayStagePlots() {
 
 }
 
+
+// GET MANIFEST AT LOGIN
+
+function getManifest(callbackFn) {
+    // we use a `setTimeout` to make this asynchronous
+    // as it would be with a real AJAX call.
+    setTimeout(function () {
+        callbackFn(MOCK_EVENTS)
+    }, 1);
+}
+
+// this function stays the same when we connect
+// to real API later
+function displayManifest(data) {
+    for (index in data.events) {
+        $('#manifest-list').append(
+            `<h3> ${data.events[index].venueName} </h3>
+            <li class="manifest-item"> 1/4" cables: qty: ${data.events[index].manifest.quarterInchCables} </li>
+            <li class="manifest-item"> XLR cables: qty: ${data.events[index].manifest.xlrCables} </li>
+            <li class="manifest-item"> ${data.events[index].manifest.misc.description}: qty: ${data.events[index].manifest.misc.qty} </li>`
+        );
+    }
+}
+
+// this function can stay the same even when we
+// are connecting to real API
+function getAndDisplayManifest() {
+    getManifest(displayManifest);
+
+}
 
 
 // LOGIN BUTTON LINKS TO DASHBOARD
@@ -376,11 +422,12 @@ const handleLogout = function () {
 
 //  on page load do this
 $(document).ready(function () {
-    //handleLogin();
-    //handleSignUp();
-    //handleLogout();
+    handleLogin();
+    handleSignUp();
+    handleLogout();
     getAndDisplayStagePlots()
     getAndDisplayEvents();
+    getAndDisplayManifest()
     renderNextQuestion();
     renderNewEvent();
 });

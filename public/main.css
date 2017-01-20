@@ -311,6 +311,14 @@ label {
     display: none;
 }
 
+#manifest-list {
+    margin-top: 75px;
+}
+
+.manifest-item {
+    font-size: 18px;
+}
+
 .loader {
     position: fixed;
     left: 0px;
