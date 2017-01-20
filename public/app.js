@@ -144,7 +144,7 @@ function renderOptionsHTML(question) {
     <div class="inc btn btn-primary up-down-btn">+</div>`;
         questionHtml += prompt;
         if (question.options[index].description) {
-            var promptMisc = `<label class="sub-label" for="description">description</label><input type="text" class="form-control user-event-input options-input sub-options-input" id="description" placeholder="item description"></div>`;
+            var promptMisc = `<label class="sub-label" for="description">description</label><input type="text" class="form-control user-event-input options-input sub-options-input" id="description" value=" " placeholder="item description"></div>`;
             questionHtml += promptMisc;
         };
         questionHtml += `</div>`;
@@ -179,7 +179,7 @@ function handleQty() {
 
 function renderQuestionHTML(question) {
     var questionHtml = `<h3>${question.question}</h3>`;
-    var prompt = `<input type="text" class="form-control user-event-input" placeholder="">`;
+    var prompt = `<input type="text" class="form-control user-event-input" value=" " placeholder="">`;
     questionHtml += prompt;
     $('#event-guide-form').html(questionHtml);
 };
@@ -188,7 +188,7 @@ function renderNextQuestion() {
     $('.btn-guide-next').on('click', function () {
         if (QUESTIONS.currentQuestion === QUESTIONS.questions.length) {
             $('.btn-guide-next').addClass('hide');
-            $('.btn-save').removeClass('hide');
+            $('.btn-save-event').removeClass('hide');
         }
         var question = QUESTIONS.questions[QUESTIONS.currentQuestion];
         if (QUESTIONS.currentQuestion !== 0) {
@@ -206,11 +206,11 @@ function renderNextQuestion() {
 
 
 function getNewEventData() {
-    var some = document.getElementsByClassName("user-event-input");
+    var input = document.getElementsByClassName("user-event-input");
 
-    for (i in some) {
+    for (i in input) {
         //extract the value of input elements
-        var singleVal = some[i].value;
+        var singleVal = input[i].value;
         if (singleVal !== "" && singleVal !== undefined) {
             QUESTIONS.manifest.push(singleVal);
         }
@@ -221,7 +221,7 @@ function getNewEventData() {
 //
 
 function renderNewEvent() {
-    $('.btn-save').on('click', function () {
+    $('.btn-save-event').on('click', function () {
         if (QUESTIONS.currentQuestion === QUESTIONS.questions.length) {
             $('table').append(
                 `<tr>
@@ -237,7 +237,7 @@ function renderNewEvent() {
             QUESTIONS.manifest = [];
             QUESTIONS.currentQuestion = 0;
             $('.btn-guide-next').removeClass('hide');
-            $('.btn-save').addClass('hide');
+            $('.btn-save-event').addClass('hide');
         }
     });
 }
@@ -321,7 +321,7 @@ function loadImageFileAsURL() {
     };
 };
 
-$('.btn-plot-save').on('click', function () {
+$('.btn-save-plot').on('click', function () {
     $('#upload-plot-modal').modal('hide');
 });
 
@@ -330,8 +330,6 @@ $('.btn-plot-save').on('click', function () {
 // GET STAGE PLOT AT LOGIN
 
 function getStagePlots(callbackFn) {
-    // we use a `setTimeout` to make this asynchronous
-    // as it would be with a real AJAX call.
     setTimeout(function () {
         callbackFn(STAGE_PLOT)
     }, 1);
@@ -378,9 +376,9 @@ const handleLogout = function () {
 
 //  on page load do this
 $(document).ready(function () {
-    handleLogin();
-    handleSignUp();
-    handleLogout();
+    //handleLogin();
+    //handleSignUp();
+    //handleLogout();
     getAndDisplayStagePlots()
     getAndDisplayEvents();
     renderNextQuestion();
