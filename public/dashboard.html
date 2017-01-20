@@ -28,7 +28,12 @@
                 <img src="images/bm-logo-2.jpeg" id="bmLogo" class="img-circle pull-left" alt="Band Mom Logo">
                 <span id="websiteTitle" class="pull-left">Band Mom</span>
                 <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
-                    <a href="landing.html" class="link">Log Out</p></a>
+                    <!--<button type="button" class="link btn-logout">log out</button>-->
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="link btn-logout" role="button">Log Out</a>
+                        </li>
+                    </ul>
                 </div>
             </header>
         </div>
@@ -47,9 +52,29 @@
             <!-- Tab panes -->
             <div class="tab-content">
                 <div class="tab-pane active" id="stage-plot">
+                    <img id="stage-plot-img" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
                     <h2>Upload your stage plot</h2>
-                    <a href="#" role="button" class="btn btn-primary btn-lg upload-btn">Upload</a>
-                    <h4>Don't have a stage plot? You can create one for free <a href="http://www.bosstweedbackline.com/stage-designer/" target="_blank">here</a></h4>
+                    <a href="#upload-plot-modal" role="button" class="btn btn-primary btn-lg upload-btn" data-toggle="modal">Upload</a>
+                    <div id="upload-plot-modal" class="modal fade col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-s-12 col-xs-12">
+                        <div class="modal-dialog col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-s-12 col-xs-12">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Upload Stage Plot</h3>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body plot-modal-body">
+                                   <input type="file" id="inputFileToLoad">
+                                    <button type="button" class="btn btn-sm" onclick="loadImageFileAsURL();">Load File</button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary btn-save-plot">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>Don't have a stage plot? You can create one for free <a href="http://www.bosstweedbackline.com/stage-designer/"
+                            target="_blank">here</a></h4>
                 </div>
                 <div class="tab-pane" id="events">
                     <div class="row">
@@ -57,38 +82,42 @@
                             <table class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <td colspan="4">Events</td>
+                                        <td colspan="5">Events</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <th class="col-md-2 text-center">Date
-                                            </td>
-                                            <th class="text-center">Venue Name</td>
-                                                <th class="text-center">Venue Address</td>
-                                                    <th class="text-center">Start Time</td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">1/22/17</a></td>
-                                        <td>The Viper Room</td>
-                                        <td>something Sunset Blvd West Hollywood CA 90069</td>
-                                        <td>8:00pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">1/27/17</a></td>
-                                        <td>Loaded</td>
-                                        <td>something Hollywood Blvd, Los Angeles CA 90038</td>
-                                        <td>9:00pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">2/15/17</a></td>
-                                        <td>The Rainbow Room</td>
-                                        <td>something Sunset Blvd West Hollywood CA 90069</td>
-                                        <td>8:00pm</td>
+                                        <th class="col-md-2 text-center">Date</td>
+                                        <th class="text-center">Venue Name</td>
+                                        <th class="text-center">Venue Address</td>
+                                        <th class="text-center">Start Time</td>
+                                        <th class="text-center">Soundcheck Time</td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" role="button" class="btn btn-primary btn-lg add-event-btn">Create Event</a>
+                            <!-- Button HTML (to Trigger Modal) -->
+                            <a href="#eventGuideModal" role="button" class="btn btn-primary btn-lg add-event-btn btn-guide-next" data-toggle="modal">Create Event</a>
+                            <!-- Modal HTML -->
+                            <div id="eventGuideModal" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Add New Event</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <form class="form-horizontal" name="answerList" id="event-guide-form"></form>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-primary btn-guide-next">Next</button>
+                                            <button type="button" class="btn btn-primary btn-save-event hide">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,6 +127,7 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
 </body>
 
 </html>

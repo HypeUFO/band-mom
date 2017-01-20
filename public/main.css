@@ -174,8 +174,17 @@ input[type="text"] {
     border: 1px solid white;
 }
 
+.btn-logout {
+    background-color: #2E2D88;
+    color: white;
+}
+
 h5 {
     margin-top: 18px;
+    font-size: 18px;
+}
+
+.manifest-options {
     font-size: 18px;
 }
 
@@ -192,8 +201,18 @@ h5 {
     padding: 50px;
 }
 
+#stage-plot-img {
+    margin-bottom: 12px;
+}
+
+#inputFileToLoad {
+    margin: auto;
+    padding: 10px;
+    font-size: 12px;
+}
+
 .table {
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .nav-tabs {
@@ -230,6 +249,63 @@ h5 {
 .add-event-btn:active {
     transform: translateY(1px);
 }
+
+#event-guide-form {
+    margin: 50px 0 0 0;
+}
+
+label {
+  font: 18px Helvetica, sans-serif;
+  display: block;
+  float: left;
+  text-align: right;
+  padding: 5px 10px 0 0;
+  width: 140px;
+}
+
+.sub-label {
+  font: 12px Helvetica, sans-serif;
+  display: block;
+  float: left;
+  text-align: right;
+  padding: 10px 10px 0 0;
+  width: 140px;
+  margin-left: 10px;
+  margin-top: 9px;
+}
+
+.options-input {
+  float: left;
+  width: auto;
+  font: 18px Helvetica, sans-serif;
+  padding: 3px 0 0 0;
+  text-align: center;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.sub-options-input {
+  text-align: left;
+  padding-left: 5px;
+  margin-top: 10px;
+  margin-left: 26px;
+}
+
+#event-guide-form div {
+  overflow: hidden;
+  margin: 0 0 5px 0;
+}
+
+.up-down-btn {
+  float: left;
+  /*text-align: center;
+  background: url(../images/buttons.png) no-repeat;*/
+}
+/*
+.dec {
+  background-position: 0 -29px;
+}*/
+
 
 .hide {
     display: none;
