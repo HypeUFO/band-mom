@@ -8,7 +8,6 @@ const morgan = require('morgan');
 const app = express();
 const {PORT, DATABASE_URL} = require('./config');
 
-
 app.use(express.static('public'));
 
 //app.use(bodyParser.json());
