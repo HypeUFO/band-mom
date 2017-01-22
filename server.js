@@ -119,7 +119,13 @@ app.put('/api/event/:id', (req, res) => {
 
 // DELETE EVENT
 
-
+app.delete('/api/event/:id', (req, res) => {
+  Event
+  .findByIdAndRemove(req.params.id)
+  .exec()
+  .then(event => res.status(204).end())
+  .catch(err => res.status(500).json({message: 'Internal server error'}));
+})
 
 
 app.use('*', function(req, res) {

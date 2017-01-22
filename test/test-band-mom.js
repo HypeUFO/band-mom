@@ -235,4 +235,24 @@ describe('GET endpoint', function() {
       });
   });
 
+  describe('DELETE endpoint', function(){
+      it('should delete an event by id', function(){
+          let event;
+          return Event
+          .findOne()
+          .exec()
+          .then(function(_event) {
+              event = _event;
+              return chai.request(app).delete(`/api/event/${event.id}`);
+          })
+          .then(function(res) {
+              res.should.have.status(204);
+              return Event.findById(event.id).exec();
+          })
+          .then(function(_event) {
+              should.not.exist(_event);
+          })
+      })
+  })
+
 });
