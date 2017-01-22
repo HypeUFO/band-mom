@@ -54,9 +54,7 @@ app.get('/api/event', (req, res) => {
 });
 
 app.get('/api/event/:id', (req, res) => {
-  Restaurant
-    // this is a convenience method Mongoose provides for searching
-    // by the object _id property
+  Event
     .findById(req.params.id)
     .exec()
     .then(event =>res.json(event.apiRepr()))
@@ -92,11 +90,11 @@ app.post('/api/event', (req, res) => {
 
 
 
+
+
 app.use('*', function(req, res) {
   return res.status(404).json({message: 'Not Found'});
 });
-
-
 
 
 //////////////////////
