@@ -1,10 +1,10 @@
-const bcrypt = require('bcryptjs');
+//const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
 // USERS
-
+/*
 const UserSchema = mongoose.Schema({
     userName: {
         type: String,
@@ -52,7 +52,7 @@ UserSchema.statics.hashPassword = function (password) {
         .hash(password, 10)
         .then(hash => hash);
 }
-
+*/
 // EVENTS
 
 const EventSchema = mongoose.Schema({
@@ -90,21 +90,20 @@ const EventSchema = mongoose.Schema({
 
 EventSchema.methods.apiRepr = function () {
     return {
+        eventDate: this.eventDate || '',
         venueName: this.venueName || '',
         venueAddress: this.venueAddress || '',
         startTime: this.startTime || '',
         soundCheckTime: this.soundCheckTime || '',
-        manifest: this.manifest || ''
+        manifest: this.manifest || '',
+        notes: this.notes || '',
+        id: this.id || '',
     };
 };
 
 
-const User = mongoose.model('User', UserSchema);
 const Event = mongoose.model('Event', EventSchema);
+//const User = mongoose.model('User', UserSchema);
 
-module.exports = {
-    User
-};
-module.exports = {
-    Event
-};
+module.exports = { Event };
+//module.exports = { User };

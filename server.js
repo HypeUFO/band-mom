@@ -1,22 +1,22 @@
-'use strict'
+//'use strict'
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 
 
-const app = express();
-const {PORT, DATABASE_URL} = require('./config');
-const {User, Event} = require('./models');
+mongoose.Promise = global.Promise;
 
+
+const {PORT, DATABASE_URL} = require('./config');
+const {Event} = require('./models');
+
+const app = express();
 app.use(express.static('public'));
 
-//app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
-mongoose.Promise = global.Promise;
 
 
 // logging
@@ -38,7 +38,9 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(__dirname + '/public/dashboard.html');
 });
 
+
 // GET Event
+
 
 
 // CREATE Event
@@ -46,13 +48,16 @@ app.get('/dashboard', (req, res) => {
 app.post('/api/event', (req, res) => {
     Event
     .create({
+      eventDate: req.body.eventDate,
       venueName: req.body.venueName,
       venueAddress: req.body.venueAddress,
       startTime: req.body.startTime,
       soundCheckTime: req.body.soundCheckTime,
       manifest: req.body.manifest,
+      notes: req.body.notes,
       dateCreated: req.body.dateCreated,
-      dateModified: req.body.dateModified
+      dateModified: req.body.dateModified,
+      userId: req.body.userId
     })
     .then(
       event => res.status(201).json(event.apiRepr()))
@@ -63,15 +68,10 @@ app.post('/api/event', (req, res) => {
 });
 
 
-/*
-const newEvent = req.body;
-    console.log(newEvent);
-    db.events.save(function(err, newEvent){
-      if (err) res.json(err);
-      else res.Send('Success!');
-    });
-    */
 
+
+
+//////////////////////
 let server;
 
 

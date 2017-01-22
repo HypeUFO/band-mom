@@ -111,18 +111,23 @@ const QUESTIONS = {
     manifest: [],
     questions: [{
         question: "What is the date of the event?",
-        //mapToField: "eventDate"
+        mapToField: "eventDate"
     }, {
         question: "What is the venue name?",
+        mapToField: "venueName"
     }, {
         question: "What is the venue address?",
+        mapToField: "venueAddress"
     }, {
         question: "What time does the event start?",
+        mapToField: "startTime"
     }, {
         question: "What time is sound check?",
+        mapToField: "soundCheckTime"
     }, {
         question: "Is there anything you need to purchase before the event?",
         isMultiLine: true,
+        mapToField: "manifest",
         options: [{
             name: "quarter inch cables",
             quantity: ""
@@ -139,6 +144,7 @@ const QUESTIONS = {
         }]
     }, {
         question: "Are there any notes you want to add?",
+        mapToField: "notes"
     }]
 };
 
@@ -226,6 +232,22 @@ function getNewEventData() {
     console.log(QUESTIONS.manifest);
 
 }
+
+/*
+function getNewEventData() {
+    var input = document.getElementsByClassName("user-event-input");
+    let key = QUESTIONS.questions[QUESTIONS.currentQuestion].mapToField;
+    for (i of input) {
+        //extract the value of input elements
+        var singleVal = i.value;
+        if (singleVal !== "" && singleVal !== undefined) {
+            NEW_EVENT.key = singleVal;
+        }
+    }
+    console.log(NEW_EVENT);
+}
+*/
+
 //
 
 function renderNewEvent() {

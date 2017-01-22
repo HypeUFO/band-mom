@@ -2,7 +2,7 @@
   "name": "capstone-2",
   "version": "1.0.0",
   "description": "capstone 2 for Thinkful fullstack program. App for bands to organize gigs. Either called \"Band Mom\" or \"Roadie\"",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "mocha",
     "start": "node server.js"
