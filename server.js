@@ -1,4 +1,4 @@
-//'use strict'
+'use strict'
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -23,11 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'));
 
 
-//app.use('*', function(req, res) {
-  //return res.status(404).json({message: 'Not Found'});
-//});
-
-
 // serve html
 
 app.get('/', (req, res) => {
@@ -41,7 +36,35 @@ app.get('/dashboard', (req, res) => {
 
 // GET Event
 
+app.get('/api/event', (req, res) => {
+  Event
+    .find()
+    .exec()
+    .then(events => {
+      res.json({
+        events: events.map(
+          (event) => event.apiRepr())
+      });
+    })
+    .catch(
+      err => {
+        console.error(err);
+        res.status(500).json({message: 'Internal server error'});
+    });
+});
 
+app.get('/api/event/:id', (req, res) => {
+  Restaurant
+    // this is a convenience method Mongoose provides for searching
+    // by the object _id property
+    .findById(req.params.id)
+    .exec()
+    .then(event =>res.json(event.apiRepr()))
+    .catch(err => {
+      console.error(err);
+        res.status(500).json({message: 'Internal server error'})
+    });
+});
 
 // CREATE Event
 
@@ -67,6 +90,11 @@ app.post('/api/event', (req, res) => {
     });
 });
 
+
+
+app.use('*', function(req, res) {
+  return res.status(404).json({message: 'Not Found'});
+});
 
 
 

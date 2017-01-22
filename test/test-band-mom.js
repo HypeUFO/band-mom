@@ -118,6 +118,55 @@ describe('Events API Endpoint', function() {
   });
   /////////////////////////
 
+describe('GET endpoint', function() {
+
+    it('should return all existing restaurants', function() {
+      let res;
+      return chai.request(app)
+        .get('/api/event')
+        .then(function(_res) {
+          res = _res;
+          res.should.have.status(200);
+          res.body.events.should.have.length.of.at.least(1);
+          return Event.count();
+        })
+        .then(function(count) {
+          res.body.events.should.have.length.of(count);
+        });
+    });
+
+
+    it('should return restaurants with right fields', function() {
+      // Strategy: Get back all restaurants, and ensure they have expected keys
+
+      let resEvent;
+      return chai.request(app)
+        .get('/api/event')
+        .then(function(res) {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.events.should.be.a('array');
+          res.body.events.should.have.length.of.at.least(1);
+
+          res.body.events.forEach(function(event) {
+            event.should.be.a('object');
+            event.should.include.keys(
+              'eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes');
+          });
+          resEvent = res.body.events[0];
+          return Event.findById(resEvent.id);
+        })
+        .then(function(event) {
+          resEvent.eventDate.should.equal(event.eventDate.toISOString());
+          resEvent.venueName.should.equal(event.venueName);
+          resEvent.venueAddress.should.equal(event.venueAddress);
+          resEvent.startTime.should.equal(event.startTime);
+          resEvent.soundCheckTime.should.equal(event.soundCheckTime);
+          //resEvent.manifest.should.contain(event.manifest);
+          resEvent.notes.should.equal(event.notes);
+        });
+    });
+  });
 
 /////////////////////////////////
   describe('POST endpoint', function() {
@@ -130,7 +179,7 @@ describe('Events API Endpoint', function() {
         .send(newEvent)
         .then(function(res) {
           res.should.have.status(201);
-          //res.should.be.json;
+          res.should.be.json;
           res.body.should.be.a('object');
           res.body.should.include.keys(
               'eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes');
