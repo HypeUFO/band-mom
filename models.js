@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise;
 
 // USERS
 
-const UserSchema = {
+const UserSchema = mongoose.Schema({
     userName: {
         type: String,
         required: true,
@@ -31,7 +31,7 @@ const UserSchema = {
         type: String,
         default: ""
     }
-};
+});
 
 UserSchema.methods.apiRepr = function () {
     return {
@@ -55,16 +55,38 @@ UserSchema.statics.hashPassword = function (password) {
 
 // EVENTS
 
-const EventSchema = {
-   venueName: {type: String},
-   venueAddress: {type: String},
-   startTime: {type: Date},
-   soundCheckTime: {type: Date},
-   manifest: {type: Object},
-   dateCreated: {type: Date},
-   dateModified: {type: Date},
-   userId: {type: String} // The user id of the user that made the event
-};
+const EventSchema = mongoose.Schema({
+    eventDate: {
+        type: Date
+    },
+    venueName: {
+        type: String
+    },
+    venueAddress: {
+        type: String
+    },
+    startTime: {
+        type: String
+    },
+    soundCheckTime: {
+        type: String
+    },
+    manifest: {
+        type: Object
+    },
+    notes: {
+        type: String
+    },
+    dateCreated: {
+        type: Date
+    },
+    dateModified: {
+        type: Date
+    },
+    userId: {
+        type: String
+    } // The user id of the user that made the event
+});
 
 EventSchema.methods.apiRepr = function () {
     return {
@@ -74,10 +96,15 @@ EventSchema.methods.apiRepr = function () {
         soundCheckTime: this.soundCheckTime || '',
         manifest: this.manifest || ''
     };
-}
+};
 
 
 const User = mongoose.model('User', UserSchema);
 const Event = mongoose.model('Event', EventSchema);
 
-module.exports = { User, Event };
+module.exports = {
+    User
+};
+module.exports = {
+    Event
+};

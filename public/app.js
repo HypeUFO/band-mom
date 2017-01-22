@@ -267,6 +267,8 @@ function saveNewEvent() {
     };
     NEW_EVENT.notes = QUESTIONS.manifest[15];
     NEW_EVENT.userId = '111111';
+    NEW_EVENT.dateCreated = new Date;
+    NEW_EVENT.dateModified = new Date;
     console.log(NEW_EVENT);
     //MOCK_EVENTS.events.push(NEW_EVENT);
     //console.log(MOCK_EVENTS);

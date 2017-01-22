@@ -1,12 +1,17 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../server.js');
+const faker = require('faker');
+const mongoose = require('mongoose');
 
 const should = chai.should();
 
-const app = server.app;
+const {User} = require('../models');
+const {app, runServer, closeServer} = require('../server');
+const {TEST_DATABASE_URL} = require('../config');
 
 chai.use(chaiHttp);
+
+// load html
 
 describe ('index page', function(){
     it ('should load', function(){
@@ -29,3 +34,5 @@ describe ('dashboard page', function(){
         });
     });
 });
+
+// API Endpoint Tests
