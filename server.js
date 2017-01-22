@@ -89,6 +89,36 @@ app.post('/api/event', (req, res) => {
 });
 
 
+// UPDATE Event
+
+app.put('/api/event/:id', (req, res) => {
+  // ensure that the id in the request path and the one in request body match
+  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+    const message = (
+      `Request path id (${req.params.id}) and request body id ` +
+      `(${req.body.id}) must match`);
+    console.error(message);
+    res.status(400).json({message: message});
+  }
+
+  const toUpdate = {dateModified: new Date};
+  const updateableFields = ['eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes'];
+
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      toUpdate[field] = req.body[field];
+    }
+  });
+
+  Event
+    .findByIdAndUpdate(req.params.id, {$set: toUpdate})
+    .exec()
+    .then(event => res.status(204).end())
+    .catch(err => res.status(500).json({message: 'Internal server error'}));
+});
+
+// DELETE EVENT
+
 
 
 

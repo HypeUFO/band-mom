@@ -120,7 +120,7 @@ describe('Events API Endpoint', function() {
 
 describe('GET endpoint', function() {
 
-    it('should return all existing restaurants', function() {
+    it('should return all existing events', function() {
       let res;
       return chai.request(app)
         .get('/api/event')
@@ -136,8 +136,7 @@ describe('GET endpoint', function() {
     });
 
 
-    it('should return restaurants with right fields', function() {
-      // Strategy: Get back all restaurants, and ensure they have expected keys
+    it('should return events with right fields', function() {
 
       let resEvent;
       return chai.request(app)
@@ -204,6 +203,36 @@ describe('GET endpoint', function() {
           //event.userId.should.equal(newEvent.userId);
         });
     });
+  });
+
+
+  describe('PUT endpoint', function() {
+
+    it('should update requested fields', function() {
+      const updateData = {
+        startTime: '10:00pm',
+        soundCheckTime: '8:00pm'
+      };
+
+      return Event
+        .findOne()
+        .exec()
+        .then(function(event) {
+          updateData.id = event.id;
+          return chai.request(app)
+            .put(`/api/event/${event.id}`)
+            .send(updateData);
+        })
+        .then(function(res) {
+          res.should.have.status(204);
+
+          return Event.findById(updateData.id).exec();
+        })
+        .then(function(event) {
+          event.startTime.should.equal(updateData.startTime);
+          event.soundCheckTime.should.equal(updateData.soundCheckTime);
+        });
+      });
   });
 
 });
