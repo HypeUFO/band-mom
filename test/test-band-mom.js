@@ -2,12 +2,16 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
+var fs = require('fs');
 
 const should = chai.should();
 
-const {Event} = require('../models');
+const {Event} = require('../models/event-model');
+const {StagePlot} = require('../models/stage-plot-model');
+const {User} = require('../models/user-model');
 const {app, runServer, closeServer} = require('../server');
 const {TEST_DATABASE_URL} = require('../config');
+
 
 chai.use(chaiHttp);
 
@@ -59,10 +63,7 @@ function generateManifest() {
         quarterInchCables: faker.random.number(),
         xlrCables: faker.random.number(),
         strings: faker.random.number(),
-        misc: {
-            description: "guitar picks",
-            qty: faker.random.number()
-        }
+        dI: faker.random.number()
     };
     return manifest;
 };
@@ -88,7 +89,7 @@ function generateEventData() {
         notes: faker.lorem.sentence(),
         dateCreated: new Date(),
         dateModified: new Date(),
-        userId: faker.random.number()
+        userId: faker.random.number().toString()
     };
 };
 
@@ -116,7 +117,8 @@ describe('Events API Endpoint', function() {
   after(function() {
     return closeServer();
   });
-  /////////////////////////
+
+////////////////////////////////////////////////////////////
 
 describe('GET endpoint', function() {
 
@@ -161,13 +163,14 @@ describe('GET endpoint', function() {
           resEvent.venueAddress.should.equal(event.venueAddress);
           resEvent.startTime.should.equal(event.startTime);
           resEvent.soundCheckTime.should.equal(event.soundCheckTime);
-          //resEvent.manifest.should.contain(event.manifest);
+          //resEvent.manifest.should.equal(event.manifest);
           resEvent.notes.should.equal(event.notes);
         });
     });
   });
 
-/////////////////////////////////
+////////////////////////////////////////////////////////////
+
   describe('POST endpoint', function() {
     it('should add a new event', function() {
 
@@ -200,11 +203,12 @@ describe('GET endpoint', function() {
           event.notes.should.equal(newEvent.notes);
           //event.dateCreated.should.equal(newEvent.dateCreated);
           //event.dateModified.should.equal(newEvent.dateModified);
-          //event.userId.should.equal(newEvent.userId);
+          event.userId.should.equal(newEvent.userId);
         });
     });
   });
 
+////////////////////////////////////////////////////////////
 
   describe('PUT endpoint', function() {
 
@@ -235,6 +239,8 @@ describe('GET endpoint', function() {
       });
   });
 
+////////////////////////////////////////////////////////////
+
   describe('DELETE endpoint', function(){
       it('should delete an event by id', function(){
           let event;
@@ -256,3 +262,128 @@ describe('GET endpoint', function() {
   })
 
 });
+
+////////////////////////////////////////////////////////////
+
+// API STAGEPLOT ENDPOINT TESTS
+/*
+const imgPath = '../public/images/stage-plot.jpeg';
+
+function getTestImage() {
+    return {
+        img: {
+            data: fs.readFileSync(imgPath),
+            contentType: 'image/jpeg'
+        },
+        dateCreated: new Date(),
+        dateModified: new Date()
+    };
+};
+
+
+function seedStagePlotData() {
+    console.info('seeding stage plot data');
+    const seedData = [{
+    "userId": "111111",
+    "file": "images/stage-plot.jpeg",
+    "dateCreated": "January 12, 2017",
+    "dateModified": "January 16, 2017"
+},
+{
+    "userId": "222222",
+    "file": "images/stage-plot.jpeg",
+    "dateCreated": "February 12, 2017",
+    "dateModified": "February 16, 2017"
+},
+{
+    "userId": "333333",
+    "file": "images/stage-plot.jpeg",
+    "dateCreated": "January 12, 2017",
+    "dateModified": "January 12, 2017"
+},
+{
+    "userId": "444444",
+    "file": "images/stage-plot.jpeg",
+    "dateCreated": "January 16, 2017",
+    "dateModified": "January 16, 2017"
+}];
+
+    return Event.insert(seedData);
+}
+
+
+function seedStagePlotData() {
+    console.info('seeding stage plot data');
+    const seedData = [];
+    seedData.push(getTestImage());
+    return Event.insert(seedData);
+}
+
+describe('StagePlot API Endpoint', function() {
+
+  before(function() {
+    return runServer(TEST_DATABASE_URL);
+  });
+
+  beforeEach(function() {
+    return seedStagePlotData();
+  });
+
+  afterEach(function() {
+    return tearDownDb();
+  });
+
+  after(function() {
+    return closeServer();
+  });
+
+  describe('GET endpoint', function() {
+
+    it('should return all existing stage plots', function() {
+      let res;
+      return chai.request(app)
+        .get('/api/stage-plot')
+        .then(function(_res) {
+          res = _res;
+          res.should.have.status(200);
+          res.body.stageplots.should.have.length.of.at.least(1);
+          return StagePlot.count();
+        })
+        .then(function(count) {
+          res.body.stageplots.should.have.length.of(count);
+        });
+    });
+
+    it('should return stage plots with right fields', function() {
+
+      let resStagePlot;
+      return chai.request(app)
+        .get('/api/stage-plot')
+        .then(function(res) {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.stageplots.should.be.a('array');
+          res.body.stageplots.should.have.length.of.at.least(1);
+
+          res.body.stageplots.forEach(function(stageplot) {
+            stageplot.should.be.a('object');
+            stageplot.should.include.keys(
+              'img', 'dateCreated', 'dateModified', 'userId');
+          });
+          resStagePlot = res.body.stageplots[0];
+          return StagePlot.findById(resStagePlot.id);
+        })
+        .then(function(stageplot) {
+          resStagePlot.img.should.equal(stageplot.img);
+          resStagePlot.dateCreated.should.equal(stageplot.dateCreated);
+          resStagePlot.dateModified.should.equal(stageplot.dateModified);
+          resStagePlot.userId.should.equal(stageplot.userId);
+          resStagePlot.img.should.contain(stageplot.img.data);
+          resStagePlot.img.should.contain(stageplot.img.contentType);
+        });
+    });
+  });
+
+
+});
+*/

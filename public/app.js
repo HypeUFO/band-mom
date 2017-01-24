@@ -1,45 +1,56 @@
 // using mock data until API is created
 const MOCK_EVENTS = {
     "events": [{
+        "eventDate": "February 2, 2017",
         "venueName": "The Rainbow Room",
         "venueAddress": "9015 W Sunset Blvd West Hollywood, CA 90069",
-        "eventDate": "February 2, 2017",
         "startTime": "9:00",
         "soundCheckTime": "8:00",
         "manifest": {
             "quarterInchCables": "2",
             "strings": "3",
             "xlrCables": "1",
-            "misc": {
-                "description": "guitar strap",
-                "qty": "1"
-            }
-
+            "dI": "1"
         },
         "userId": "111111" // The user id of the user that made the event
     }, {
+        "eventDate": "March 2, 2017",
         "venueName": "Loaded",
         "venueAddress": "6377 Hollywood Blvd Los Angeles, CA 90028",
-        "eventDate": "March 2, 2017",
         "startTime": "8:00",
         "soundCheckTime": "7:00",
-        "manifest": {},
+        "manifest": {
+            "quarterInchCables": "1",
+            "strings": "0",
+            "xlrCables": "1",
+            "dI": "2"
+        },
         "userId": "333333"
     }, {
+        "eventDate": "December 2, 2017",
         "venueName": "The Satellite",
         "venueAddress": "1717 Silver Lake Blvd Los Angeles, CA 90026",
-        "eventDate": "December 2, 2017",
         "startTime": "9:00",
         "soundCheckTime": "7:00",
-        "manifest": {},
+        "manifest": {
+            "quarterInchCables": "0",
+            "strings": "0",
+            "xlrCables": "0",
+            "dI": "0"
+        },
         "userId": "222222"
     }, {
+        "eventDate": "February 2, 2017",
         "venueName": "The Rainbow Room",
         "venueAddress": "9015 W Sunset Blvd West Hollywood, CA 90069",
-        "eventDate": "February 2, 2017",
         "startTime": "9:00",
         "soundCheckTime": "7:00",
-        "manifest": {},
+        "manifest": {
+            "quarterInchCables": "4",
+            "strings": "0",
+            "xlrCables": "2",
+            "dI": "0"
+        },
         "userId": "444444"
     }]
 };
@@ -102,13 +113,11 @@ const MOCK_STAGE_PLOT = {
 
 // NEW EVENT SETUP GUIDE
 
-const NEW_EVENT = {
-
-};
+const NEW_EVENT = {};
 
 const QUESTIONS = {
     currentQuestion: 0,
-    manifest: [],
+    //manifest: [],
     questions: [{
         question: "What is the date of the event?",
         mapToField: "eventDate"
@@ -129,17 +138,16 @@ const QUESTIONS = {
         isMultiLine: true,
         mapToField: "manifest",
         options: [{
-            name: "quarter inch cables",
+            name: "quarterInchCables",
             quantity: ""
         }, {
-            name: "XLR cables",
+            name: "xlrCables",
             quantity: ""
         }, {
-            name: "guitar/bass strings",
+            name: "strings",
             quantity: ""
         }, {
-            name: "misc",
-            description: "$('.description').val()",
+            name: "dIs",
             quantity: ""
         }]
     }, {
@@ -155,13 +163,8 @@ function renderOptionsHTML(question) {
         <label for="${question.options[index].name}">${question.options[index].name}</label>
         <div class="dec btn btn-primary up-down-btn">-</div>
         <input type="text" class="form-control user-event-input options-input qty-input" id="${question.options[index].name}" value="0">
-    <div class="inc btn btn-primary up-down-btn">+</div>`;
+    <div class="inc btn btn-primary up-down-btn">+</div></div>`;
         questionHtml += prompt;
-        if (question.options[index].description) {
-            var promptMisc = `<label class="sub-label" for="description">description</label><input type="text" class="form-control user-event-input options-input sub-options-input" id="description" value=" " placeholder="item description"></div>`;
-            questionHtml += promptMisc;
-        };
-        questionHtml += `</div>`;
     };
     $('#event-guide-form').html(questionHtml);
     handleQty();
@@ -193,32 +196,51 @@ function handleQty() {
 
 function renderQuestionHTML(question) {
     var questionHtml = `<h3>${question.question}</h3>`;
-    var prompt = `<input type="text" class="form-control user-event-input" value=" " placeholder="">`;
+    var prompt = `<input type="text" class="form-control user-event-input" placeholder="">`;
     questionHtml += prompt;
     $('#event-guide-form').html(questionHtml);
 };
 
+function renderFirstQuestion() {
+    const question = QUESTIONS.questions[QUESTIONS.currentQuestion];
+    $('.btn-guide-start').on('click', function () {
+        renderQuestionHTML(question);
+    });
+}
+
 function renderNextQuestion() {
     $('.btn-guide-next').on('click', function () {
+        getNewEventData();
+        QUESTIONS.currentQuestion++;
+        const question = QUESTIONS.questions[QUESTIONS.currentQuestion];
         if (QUESTIONS.currentQuestion === QUESTIONS.questions.length) {
+            renderLastQuestion();
             $('.btn-guide-next').addClass('hide');
             $('.btn-save-event').removeClass('hide');
-        }
-        var question = QUESTIONS.questions[QUESTIONS.currentQuestion];
-        if (QUESTIONS.currentQuestion !== 0) {
-            getNewEventData();
-        }
-        if (question.options) {
+        } else if (question.options) {
             renderOptionsHTML(question);
         } else {
             renderQuestionHTML(question);
         }
-        QUESTIONS.currentQuestion++;
     });
 }
-
-
-
+function renderLastQuestion() {
+    newEvent = NEW_EVENT;
+    $('#event-guide-form').html(
+        `<h3> Is this correct? </h3>
+        <h4> Event Date: ${newEvent.eventDate} </h4>
+        <h4> Venue Name: ${newEvent.venueName} </h4>
+        <h4> Venue Address: ${newEvent.venueAddress} </h4>
+        <h4> Start Time: ${newEvent.startTime} </h4>
+        <h4> Soundcheck Time: ${newEvent.soundCheckTime} </h4>
+        <h4> 1/4" cables: qty: ${newEvent.manifest.quarterInchCables} </h4>
+        <h4> XLR cables: qty: ${newEvent.manifest.xlrCables} </h4>
+        <h4> DI's: qty: ${newEvent.manifest.dIs} </h4>
+        <h4> notes: ${newEvent.notes} </h4>`
+    
+    );
+}
+/*
 function getNewEventData() {
     var input = document.getElementsByClassName("user-event-input");
 
@@ -232,73 +254,79 @@ function getNewEventData() {
     console.log(QUESTIONS.manifest);
 
 }
+*/
 
-/*
 function getNewEventData() {
-    var input = document.getElementsByClassName("user-event-input");
-    let key = QUESTIONS.questions[QUESTIONS.currentQuestion].mapToField;
-    for (i of input) {
-        //extract the value of input elements
-        var singleVal = i.value;
-        if (singleVal !== "" && singleVal !== undefined) {
-            NEW_EVENT.key = singleVal;
+    const input = $(".user-event-input");
+    const currentQuestion = QUESTIONS.questions[QUESTIONS.currentQuestion]
+    const key = currentQuestion.mapToField;
+    console.log(input);
+    if (currentQuestion.isMultiLine) {
+        NEW_EVENT[key] = {}
+        for (let i = 0; i < input.length; i++) {
+            let singleVal = input[i].value;
+            //if (i < input.length) {
+            //    NEW_EVENT[key][currentQuestion.options[i].name] = singleVal;
+           // } else {
+            NEW_EVENT[key][currentQuestion.options[i].name] = singleVal;
+            //}
         }
+    } else {
+        let singleVal = input[0].value;
+        NEW_EVENT[key] = singleVal;
     }
     console.log(NEW_EVENT);
-}
-*/
+};
+
+
+
+
 
 //
 
+function cancelNewEvent() {
+    $('.btn-guide-cancel').on('click', function () {
+            QUESTIONS.currentQuestion = 0;
+            $('#eventGuideModal').modal('hide');
+    });
+}
+
 function renderNewEvent() {
     $('.btn-save-event').on('click', function () {
-        if (QUESTIONS.currentQuestion === QUESTIONS.questions.length) {
-            $('table').append(
-                `<tr>
-                <td> ${QUESTIONS.manifest[0]} </td>
-                <td> ${QUESTIONS.manifest[1]} </td>
-                <td> ${QUESTIONS.manifest[2]} </td>
-                <td> ${QUESTIONS.manifest[3]} </td>
-                <td> ${QUESTIONS.manifest[4]} </td>
-            </tr>`);
             console.log(QUESTIONS.manifest);
+            console.log(NEW_EVENT);
             saveNewEvent();
-            $('#eventGuideModal').modal('hide');
-            QUESTIONS.manifest = [];
             QUESTIONS.currentQuestion = 0;
             $('.btn-guide-next').removeClass('hide');
             $('.btn-save-event').addClass('hide');
-        }
+            $('#eventGuideModal').modal('hide');
+            //NEW_EVENT = {};
     });
 }
 
 function saveNewEvent() {
-    NEW_EVENT.eventDate = QUESTIONS.manifest[0];
-    NEW_EVENT.venueName = QUESTIONS.manifest[1];
-    NEW_EVENT.venueAddress = QUESTIONS.manifest[2];
-    NEW_EVENT.startTime = QUESTIONS.manifest[3];
-    NEW_EVENT.soundCheckTime = QUESTIONS.manifest[4];
-    NEW_EVENT.manifest = {
-        "quarterInchCables": QUESTIONS.manifest[5],
-        "xlrCables": QUESTIONS.manifest[6],
-        "strings": QUESTIONS.manifest[7],
-        "misc": {
-            "qty": QUESTIONS.manifest[8],
-            "description": QUESTIONS.manifest[9]
-        }
-    };
-    NEW_EVENT.notes = QUESTIONS.manifest[15];
-    NEW_EVENT.userId = '111111';
     NEW_EVENT.dateCreated = new Date;
     NEW_EVENT.dateModified = new Date;
+    NEW_EVENT.userId = '111111';
     console.log(NEW_EVENT);
-    //MOCK_EVENTS.events.push(NEW_EVENT);
-    //console.log(MOCK_EVENTS);
+
     $.ajax({
         type: "POST",
         url: '/api/event',
         data: NEW_EVENT,
-        //success: success,
+        success: function(data) {
+            $('table').append(
+            `<tr>
+                <td> ${data.eventDate} </td>
+                <td> ${data.venueName} </td>
+                <td> ${data.venueAddress} </td>
+                <td> ${data.startTime} </td>
+                <td> ${data.soundCheckTime} </td>
+            </tr>`);
+    },
+        error: function() {
+            alert('An error occured while processing your request');
+        }
         //dataType: dataType
     });
 }
@@ -313,12 +341,18 @@ function saveNewEvent() {
 // to the server and then run the callbackFn
 
 function getEvents(callbackFn) {
-    // we use a `setTimeout` to make this asynchronous
-    // as it would be with a real AJAX call.
-    setTimeout(function () {
-        callbackFn(MOCK_EVENTS)
-    }, 1);
-}
+    $.ajax({
+        type: "GET",
+        url: '/api/event',
+        success: function(data) {
+            console.log(data);
+            callbackFn(data);
+        }
+    });
+        //console.log(data);
+        //callbackFn(data)
+
+};
 
 // this function stays the same when we connect
 // to real API later
@@ -326,7 +360,7 @@ function displayEvents(data) {
     for (index in data.events) {
         $('table').append(
             `<tr>
-                <td><a href="#"> ${data.events[index].eventDate} </a></td>
+                <td>${data.events[index].eventDate} </td>
                 <td> ${data.events[index].venueName} </td>
                 <td> ${data.events[index].venueAddress} </td>
                 <td> ${data.events[index].startTime} </td>
@@ -409,7 +443,7 @@ function displayManifest(data) {
             `<h3> ${data.events[index].venueName} </h3>
             <li class="manifest-item"> 1/4" cables: qty: ${data.events[index].manifest.quarterInchCables} </li>
             <li class="manifest-item"> XLR cables: qty: ${data.events[index].manifest.xlrCables} </li>
-            <li class="manifest-item"> ${data.events[index].manifest.misc.description}: qty: ${data.events[index].manifest.misc.qty} </li>`
+            <li class="manifest-item"> DI's: qty: ${data.events[index].manifest.dI} </li>`
         );
     }
 }
@@ -449,9 +483,11 @@ $(document).ready(function () {
     handleLogin();
     handleSignUp();
     handleLogout();
-    getAndDisplayStagePlots()
+    getAndDisplayStagePlots();
     getAndDisplayEvents();
-    getAndDisplayManifest()
+    getAndDisplayManifest();
+    renderFirstQuestion();
     renderNextQuestion();
+    cancelNewEvent()
     renderNewEvent();
 });

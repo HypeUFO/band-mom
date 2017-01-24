@@ -3,13 +3,15 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-
+const fs = require('fs');
 
 mongoose.Promise = global.Promise;
 
 
 const {PORT, DATABASE_URL} = require('./config');
-const {Event} = require('./models');
+const {Event} = require('./models/event-model');
+const {StagePlot} = require('./models/stage-plot-model');
+const {User} = require('./models/user-model');
 
 const app = express();
 app.use(express.static('public'));
@@ -127,6 +129,62 @@ app.delete('/api/event/:id', (req, res) => {
   .catch(err => res.status(500).json({message: 'Internal server error'}));
 })
 
+///////////////////////////////////////////////////
+
+// GET STAGE PLOT
+
+app.get('/api/stage-plot', (req, res) => {
+  StagePlot
+    .find()
+    .exec()
+    .then(stageplots => {
+      res.json({
+        stageplots: stageplots.map(
+          (stageplot) => stageplot.apiRepr())
+      });
+    })
+    .catch(
+      err => {
+        console.error(err);
+        res.status(500).json({message: 'Internal server error'});
+    });
+});
+
+app.get('/api/stage-plot/:id', (req, res) => {
+  StagePlot
+    .findById(req.params.id)
+    .exec()
+    .then(stageplot =>res.json(stageplot.apiRepr()))
+    .catch(err => {
+      console.error(err);
+        res.status(500).json({message: 'Internal server error'})
+    });
+});
+
+// CREATE STAGE PLOT
+
+app.post('/api/stage-plot', (req, res) => {
+    StagePlot
+    .create({
+      img: req.body.img,
+      dateCreated: req.body.dateCreated,
+      dateModified: req.body.dateModified,
+      userId: req.body.userId
+    })
+    .then(
+      stageplot => res.status(201).json(stageplot.apiRepr()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
+});
+
+
+
+
+
+
+///////////////////////////////////////////////////
 
 app.use('*', function(req, res) {
   return res.status(404).json({message: 'Not Found'});
@@ -134,6 +192,7 @@ app.use('*', function(req, res) {
 
 
 //////////////////////
+
 let server;
 
 
