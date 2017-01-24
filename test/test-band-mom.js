@@ -163,7 +163,7 @@ describe('GET endpoint', function() {
           resEvent.venueAddress.should.equal(event.venueAddress);
           resEvent.startTime.should.equal(event.startTime);
           resEvent.soundCheckTime.should.equal(event.soundCheckTime);
-          //resEvent.manifest.should.equal(event.manifest);
+          resEvent.manifest.should.deep.equal(event.manifest);
           resEvent.notes.should.equal(event.notes);
         });
     });
@@ -190,7 +190,7 @@ describe('GET endpoint', function() {
           res.body.venueAddress.should.equal(newEvent.venueAddress);
           res.body.startTime.should.equal(newEvent.startTime);
           res.body.soundCheckTime.should.equal(newEvent.soundCheckTime);
-          //res.body.manifest.should.equal(newEvent.manifest);
+          res.body.manifest.should.deep.equal(newEvent.manifest);
           res.body.notes.should.equal(newEvent.notes);
           return Event.findById(res.body.id);
         })
@@ -199,10 +199,10 @@ describe('GET endpoint', function() {
           event.venueAddress.should.equal(newEvent.venueAddress);
           event.startTime.should.equal(newEvent.startTime);
           event.soundCheckTime.should.equal(newEvent.soundCheckTime);
-          //event.manifest.should.equal(newEvent.manifest);
+          event.manifest.should.deep.equal(newEvent.manifest);
           event.notes.should.equal(newEvent.notes);
-          //event.dateCreated.should.equal(newEvent.dateCreated);
-          //event.dateModified.should.equal(newEvent.dateModified);
+          event.dateCreated.toString().should.equal(newEvent.dateCreated.toString());
+          event.dateModified.toString().should.equal(newEvent.dateModified.toString());
           event.userId.should.equal(newEvent.userId);
         });
     });

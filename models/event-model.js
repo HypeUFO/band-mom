@@ -40,7 +40,7 @@ const EventSchema = mongoose.Schema({
 
 EventSchema.methods.apiRepr = function () {
     return {
-        eventDate: this.eventDate || '',
+        eventDate: this.eventDate.toLocaleDateString('en-US') || '',
         venueName: this.venueName || '',
         venueAddress: this.venueAddress || '',
         startTime: this.startTime || '',

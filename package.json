@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/HypeUFO/capstone-2#readme",
   "dependencies": {
+    "bcrypt-nodejs-as-promised": "^1.0.4",
+    "bcryptjs": "^2.4.0",
     "body-parser": "^1.16.0",
     "express": "^4.14.0",
     "mongoose": "^4.7.7",
