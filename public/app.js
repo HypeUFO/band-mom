@@ -458,6 +458,7 @@ function getAndDisplayManifest() {
 
 // LOGIN BUTTON LINKS TO DASHBOARD
 
+
 const handleLogin = function () {
     $('.btn-login').click(function () {
         window.location.href = "dashboard.html";

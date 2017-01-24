@@ -11,7 +11,11 @@ const UserSchema = mongoose.Schema({
         required: true,
         unique: true
     },
-    password: {
+    hashedPassword: {
+        type: String,
+        required: true
+    },
+    salt: {
         type: String,
         required: true
     },
@@ -37,20 +41,21 @@ UserSchema.methods.apiRepr = function () {
     return {
         userName: this.userName || '',
         firstName: this.firstName || '',
-        lastName: this.lastName || ''
+        lastName: this.lastName || '',
+        _id: this._id || ''
     };
 }
 
 UserSchema.methods.validatePassword = function (password) {
     return bcrypt
-        .compare(password, this.password)
+        .compare(password, this.hashedPassword)
         .then(isValid => isValid);
 }
 
 UserSchema.statics.hashPassword = function (password) {
-    return bcrypt
-        .hash(password, 10)
-        .then(hash => hash);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    return { hash, salt };
 }
 
 
