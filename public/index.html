@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/css/bootstrapvalidator.min.css">
 </head>
 
 <body>
@@ -33,38 +34,76 @@
                             <a href="#" class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Log In<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <form class="navbar-form navbar-right login-form" role="search" action="/api/login" method="post">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="email">
-                                        <input type="text" class="form-control" placeholder="password">
+                                    <div class="form-group has-danger">
+                                        <input type="text" class="form-control login-email" placeholder="email">
+                                        <input type="text" class="form-control login-password" placeholder="password">
+                                        <div class="form-control-feedback hide">Log in failed. Please try again.</div>
+                                        <button type="submit" class="btn btn-default btn-login">log in</button>
                                     </div>
-                                    <button type="submit" class="btn btn-default btn-login">log in</button>
                                 </form>
                             </ul>
                         </li>
                         <li>
                             <!-- Button HTML (to Trigger Modal) -->
-                            <a href="#myModal" role="button" class="link" data-toggle="modal">Sign Up</a>
+                            <a href="#signupModal" role="button" class="link" data-toggle="modal">Sign Up</a>
                             <!-- Modal HTML -->
-                            <div id="myModal" class="modal fade">
+                            <div id="signupModal" class="modal fade">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h3 class="modal-title">Sign Up</h3>
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                         </div>
-                                        <div class="modal-body">
+                                        <form id="signup-form" class="form-horizontal">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="first name">
-                                                <input type="text" class="form-control" placeholder="last name">
-                                                <input type="text" class="form-control" placeholder="email">
-                                                <input type="text" class="form-control" placeholder="password">
-                                                <input type="text" class="form-control" placeholder="confirm password">
+                                                <label class="col-md-3 control-label">Email address</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control signup-email" placeholder="email@email.com" name="email" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary btn-signup">Sign Up</button>
-                                        </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Username</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control signup-user-name" placeholder="username" name="userName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">First Name</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control signup-first-name" placeholder="first name" name="firstName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Last Name</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control signup-last-name" placeholder="last name" name="lastName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Phone</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control signup-phone" placeholder="555-555-5555" name="phone" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Password</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control signup-password" placeholder="password" name="password" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Confirm Password</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control signup-password-confirm" placeholder="re-enter password" name="passwordConfirm" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-offset-3 col-md-8">
+                                                    <button type="submit" class="btn btn-primary pull-right" id="btn-signup">Sign Up</button>
+                                                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -120,32 +159,11 @@
             </a>
         </div>
         <!-- <button type="submit" class="btn btn-lg sign-up-button js-sign-up-button">sign up</button>-->
-        <h5>Already have an account? <a href="#myModal1" role="button" data-toggle="modal">Log in</a>
-                            <!-- Modal HTML -->
-                            <div id="myModal1" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title">Log In</h3>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="email">
-                                                <input type="text" class="form-control" placeholder="password">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary btn-login">Log In</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-        </h5>
+        <h5>Already have an account? <a href="/login.html" role="button">Log in</a></h5>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
 </body>
 

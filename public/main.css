@@ -165,6 +165,14 @@ input[type="text"] {
     transform: translateY(1px);
 }
 
+#signup-form {
+    color: #2E2D88;
+}
+
+.help-block {
+    font-size: 12px;
+}
+
 .form-group {
     margin-right: 15px;
 }

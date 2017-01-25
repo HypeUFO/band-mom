@@ -21,7 +21,8 @@ const UserSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     firstName: {
         type: String,
@@ -42,7 +43,9 @@ UserSchema.methods.apiRepr = function () {
         userName: this.userName || '',
         firstName: this.firstName || '',
         lastName: this.lastName || '',
-        _id: this._id || ''
+        email: this.email || '',
+        phone: this.phone || '',
+        userId: this._id || ''
     };
 }
 

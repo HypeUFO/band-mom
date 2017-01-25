@@ -183,6 +183,8 @@ app.post('/api/stage-plot', (req, res) => {
 
 // USERS
 
+  // Sign Up/Create User
+
 app.post('/api/user', (req, res) => {
   const encryption = User.hashPassword(req.body.password);
   User
@@ -195,8 +197,7 @@ app.post('/api/user', (req, res) => {
       hashedPassword: encryption.hash,
       salt: encryption.salt
     })
-    .then(
-      user => res.status(200).json(user.apiRepr()))
+    .then(user => res.status(200).json(user.apiRepr()))
     .catch(err => {
       console.error(err);
       res.status(500).json({
@@ -206,10 +207,12 @@ app.post('/api/user', (req, res) => {
     });
 });
 
+  // User Login
+
 app.post('/api/login', (req, res) => {
   User
     .findOne({
-      userName: req.body.userName
+      email: req.body.email
     })
     .then(user =>  user.validatePassword(req.body.password))
     .then(isValid => {
