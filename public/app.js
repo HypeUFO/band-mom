@@ -237,7 +237,6 @@ function renderLastQuestion() {
         <h4> XLR cables: qty: ${newEvent.manifest.xlrCables} </h4>
         <h4> DI's: qty: ${newEvent.manifest.dIs} </h4>
         <h4> notes: ${newEvent.notes} </h4>`
-    
     );
 }
 /*
@@ -344,6 +343,9 @@ function getEvents(callbackFn) {
     $.ajax({
         type: "GET",
         url: '/api/event',
+        data: {
+            userId: User._id
+        },
         success: function(data) {
             console.log(data);
             callbackFn(data);
@@ -478,7 +480,7 @@ const handleLogin = function () {
 };
 
 const handleSignUp = function () {
-    $('#btn-signup').click(function (e) {
+    $('#btn-signup').click(function () {
         validateSignUp();
         if ($('.signup-password').val() === $('.signup-password-confirm').val()) {
         $.ajax({

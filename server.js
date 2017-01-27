@@ -216,7 +216,7 @@ app.post('/api/login', (req, res) => {
     })
     .then(user =>  user.validatePassword(req.body.password))
     .then(isValid => {
-      isValid ? res.sendStatus(200) : res.sendStatus(400);
+      isValid ? res.sendStatus(200).son(user.apiRepr) : res.sendStatus(400);
     })
     .catch(err => {
       res.status(401).json({
