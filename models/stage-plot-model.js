@@ -7,7 +7,9 @@ mongoose.Promise = global.Promise;
 
 const StagePlotSchema = mongoose.Schema({
     img: {
-        data: Buffer, contentType: String
+        data: Buffer,
+        contentType: String,
+        //required: true
         },
     dateCreated: {
         type: Date
@@ -16,7 +18,8 @@ const StagePlotSchema = mongoose.Schema({
         type: Date
     },
     userId: {
-        type: String
+        type: String,
+        required: true
     } // The user id of the user that made the event
 });
 

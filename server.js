@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const fs = require('fs');
+const passport = require('passport');
+const {BasicStrategy} = require('passport-http');
 
 mongoose.Promise = global.Promise;
 
@@ -20,25 +21,51 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 // logging
 app.use(morgan('common'));
+
+const basicStrategy = new BasicStrategy(function(username, password, callback) {
+  let user;
+  User
+    .findOne({username: username})
+    .exec()
+    .then(_user => {
+      user = _user;
+      if (!user) {
+        return callback(null, false, {message: 'Incorrect username'});
+      }
+      return user.validatePassword(password);
+    })
+    .then(isValid => {
+      if (!isValid) {
+        return callback(null, false, {message: 'Incorrect password'});
+      }
+      else {
+        return callback(null, user)
+      }
+    });
+});
+
+const router = express.Router();
+passport.use(basicStrategy);
+router.use(passport.initialize());
+
 
 
 // serve html
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get('/dashboard', (req, res) => {
+router.get('/dashboard', (req, res) => {
   res.sendFile(__dirname + '/public/dashboard.html');
 });
 
 
 // GET Event
 
-app.get('/api/event', (req, res) => {
+router.get('/api/event', (req, res) => {
   Event
     .find()
     .exec()
@@ -55,7 +82,7 @@ app.get('/api/event', (req, res) => {
     });
 });
 
-app.get('/api/event/:id', (req, res) => {
+router.get('/api/event/:id', (req, res) => {
   Event
     .findById(req.params.id)
     .exec()
@@ -68,7 +95,7 @@ app.get('/api/event/:id', (req, res) => {
 
 // CREATE Event
 
-app.post('/api/event', (req, res) => {
+router.post('/api/event', (req, res) => {
     Event
     .create({
       eventDate: req.body.eventDate,
@@ -93,7 +120,7 @@ app.post('/api/event', (req, res) => {
 
 // UPDATE Event
 
-app.put('/api/event/:id', (req, res) => {
+router.put('/api/event/:id', (req, res) => {
   // ensure that the id in the request path and the one in request body match
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     const message = (
@@ -121,7 +148,7 @@ app.put('/api/event/:id', (req, res) => {
 
 // DELETE EVENT
 
-app.delete('/api/event/:id', (req, res) => {
+router.delete('/api/event/:id', (req, res) => {
   Event
   .findByIdAndRemove(req.params.id)
   .exec()
@@ -133,7 +160,7 @@ app.delete('/api/event/:id', (req, res) => {
 
 // GET STAGE PLOT
 
-app.get('/api/stage-plot', (req, res) => {
+router.get('/api/stage-plot', (req, res) => {
   StagePlot
     .find()
     .exec()
@@ -150,7 +177,7 @@ app.get('/api/stage-plot', (req, res) => {
     });
 });
 
-app.get('/api/stage-plot/:id', (req, res) => {
+router.get('/api/stage-plot/:id', (req, res) => {
   StagePlot
     .findById(req.params.id)
     .exec()
@@ -163,13 +190,15 @@ app.get('/api/stage-plot/:id', (req, res) => {
 
 // CREATE STAGE PLOT
 
-app.post('/api/stage-plot', (req, res) => {
+
+
+router.post('/api/stage-plot', (req, res) => {
     StagePlot
     .create({
       img: req.body.img,
       dateCreated: req.body.dateCreated,
       dateModified: req.body.dateModified,
-      userId: req.body.userId
+      userId: req.body.userId,
     })
     .then(
       stageplot => res.status(201).json(stageplot.apiRepr()))
@@ -180,12 +209,11 @@ app.post('/api/stage-plot', (req, res) => {
 });
 
 
-
 // USERS
 
   // Sign Up/Create User
 
-app.post('/api/user', (req, res) => {
+router.post('/api/user', (req, res) => {
   const encryption = User.hashPassword(req.body.password);
   User
     .create({
@@ -209,14 +237,15 @@ app.post('/api/user', (req, res) => {
 
   // User Login
 
-app.post('/api/login', (req, res) => {
+router.post('/api/login', (req, res) => {
   User
     .findOne({
-      email: req.body.email
+      userName: req.body.username
     })
     .then(user =>  user.validatePassword(req.body.password))
     .then(isValid => {
-      isValid ? res.sendStatus(200).son(user.apiRepr) : res.sendStatus(400);
+      //res.redirect('/dashboard');
+      return isValid ? res.sendStatus(200).son(user.apiRepr) : res.sendStatus(400);
     })
     .catch(err => {
       res.status(401).json({
@@ -225,11 +254,20 @@ app.post('/api/login', (req, res) => {
     });
 });
 
+router.get('/dashboard', passport.authenticate('basic', {session: true, failureRedirect: '/login'}), (req, res) => {
+  res.sendFile('/dashboard.html');
+});
+
+router.get('/login', (req, res) => {
+  res.sendFile('/login.html');
+});
+
 
 
 ///////////////////////////////////////////////////
+app.use('/', router);
 
-app.use('*', function(req, res) {
+router.use('*', function(req, res) {
   return res.status(404).json({message: 'Not Found'});
 });
 

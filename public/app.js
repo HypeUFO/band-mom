@@ -1,3 +1,4 @@
+
 // using mock data until API is created
 const MOCK_EVENTS = {
     "events": [{
@@ -379,7 +380,7 @@ function getAndDisplayEvents() {
 }
 
 // LOAD NEW STAGE PLOT
-
+/*
 function loadImageFileAsURL() {
     var filesSelected = document.getElementById("inputFileToLoad").files;
     if (filesSelected.length > 0) {
@@ -396,6 +397,8 @@ function loadImageFileAsURL() {
         };
     };
 };
+*/
+
 
 $('.btn-save-plot').on('click', function () {
     $('#upload-plot-modal').modal('hide');
@@ -426,6 +429,40 @@ function getAndDisplayStagePlots() {
 
 }
 
+Dropzone.options.uploadPlot = {
+  paramName: 'file',
+  maxFilesize: 2, // MB
+  maxFiles: 1,
+  dictDefaultMessage: 'Drag an image here to upload, or click to select one',
+  addRemoveLinks: true,
+  dictCancelUpload: 'Cancel',
+  dictCancelUploadConfirmation: 'Upload Cancelled',
+  dictRemoveFile: 'Delete',
+  headers: {
+    //'x-csrf-token': document.querySelectorAll('meta[name=csrf-token]')[0].getAttributeNode('content').value,
+  },
+  acceptedFiles: 'image/*',
+  init: function() {
+    this.on('success', function( file, resp ){
+      console.log( file );
+      console.log( resp );
+    });
+    this.on('thumbnail', function(file) {
+      if ( file.width < 640 || file.height < 480 ) {
+        file.rejectDimensions();
+      }
+      else {
+        file.acceptDimensions();
+      }
+    });
+  },
+  accept: function(file, done) {
+    file.acceptDimensions = done;
+    file.rejectDimensions = function() {
+      done('The image must be at least 640 x 480px')
+    };
+  }
+};
 
 // GET MANIFEST AT LOGIN
 
@@ -463,16 +500,18 @@ function getAndDisplayManifest() {
 const handleLogin = function () {
     $('.btn-login').on('click', function (e) {
         e.preventDefault();
-        //const $this = $(this);
         $.ajax({
             type: 'POST',
             url: '/api/login',
             data: {
-                email: $('.login-email').val(),
+                username: $('.login-email').val(),
                 password: $('.login-password').val()
             },
             success: function () {
-                    window.location.href = "dashboard.html"
+                    //window.location.href = "/dashboard";
+                    //getAndDisplayEvents();
+                    //getAndDisplayStagePlots();
+                    //getAndDisplayManifest();
             },
             //error: function
         });
@@ -579,9 +618,6 @@ $(document).ready(function () {
     handleLogin();
     handleSignUp();
     handleLogout();
-    getAndDisplayStagePlots();
-    getAndDisplayEvents();
-    getAndDisplayManifest();
     renderFirstQuestion();
     renderNextQuestion();
     cancelNewEvent()
