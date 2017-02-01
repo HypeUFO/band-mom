@@ -4,7 +4,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
-const {BasicStrategy} = require('passport-http');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
+const cookieParser = require('cookie-parser')
+const flash = require('connect-flash');
 
 mongoose.Promise = global.Promise;
 
@@ -21,13 +24,27 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(morgan('dev'));
+//app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: false}));
+/*app.use(session({secret: 'anystringoftext',
+				 saveUninitialized: true,
+				 resave: true}));
+         */
+app.use(cookieParser());
+app.use(session({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+//app.use(flash());
+
 // logging
 app.use(morgan('common'));
 
-const basicStrategy = new BasicStrategy(function(username, password, callback) {
+const localStrategy = new LocalStrategy(function(username, password, callback) {
+  console.log('enter local strategy', username, password);
   let user;
   User
-    .findOne({username: username})
+    .findOne({userName: username})
     .exec()
     .then(_user => {
       user = _user;
@@ -47,8 +64,18 @@ const basicStrategy = new BasicStrategy(function(username, password, callback) {
 });
 
 const router = express.Router();
-passport.use(basicStrategy);
+passport.use(localStrategy);
 router.use(passport.initialize());
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 
 
@@ -57,10 +84,11 @@ router.use(passport.initialize());
 router.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
-
+/*
 router.get('/dashboard', (req, res) => {
   res.sendFile(__dirname + '/public/dashboard.html');
 });
+*/
 
 
 // GET Event
@@ -237,30 +265,46 @@ router.post('/api/user', (req, res) => {
 
   // User Login
 
-router.post('/api/login', (req, res) => {
+router.post('/api/login', 
+  passport.authenticate('local', {session: true, successRedirect: '/dashboard', failureRedirect: '/login'}),
+  (req, res) => {
+  console.log('test login');
+  /*if (!req.body.username) {
+    req.sendStatus(400);
+  }
   User
-    .findOne({
-      userName: req.body.username
+    .findOne({userName: req.body.username})
+    .then(user =>  {
+      console.log('validating')
+      return {
+        user,
+        isValid: user.validatePassword(req.body.password)
+      }
     })
-    .then(user =>  user.validatePassword(req.body.password))
-    .then(isValid => {
+    .then(data => {
+      console.log('is valid', data.isValid)
       //res.redirect('/dashboard');
-      return isValid ? res.sendStatus(200).son(user.apiRepr) : res.sendStatus(400);
-    })
+      return data.isValid ? res.status(200).json(data.user.apiRepr()) : res.sendStatus(400);
+})*/
+/*
     .catch(err => {
       res.status(401).json({
-        message: 'login failed'
+        message: 'login failed',
+        err: err
       });
-    });
-});
-
-router.get('/dashboard', passport.authenticate('basic', {session: true, failureRedirect: '/login'}), (req, res) => {
-  res.sendFile('/dashboard.html');
+    });*/
 });
 
 router.get('/login', (req, res) => {
   res.sendFile('/login.html');
 });
+
+router.get('/dashboard', passport.authenticate('local', {session: true}), (req, res) => {
+  console.log('test');
+  res.sendFile(__dirname + '/dashboard.html');
+});
+
+
 
 
 

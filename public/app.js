@@ -498,7 +498,7 @@ function getAndDisplayManifest() {
 // LOGIN AUTH
 
 const handleLogin = function () {
-    $('.btn-login').on('click', function (e) {
+    /*$('.btn-login').on('click', function (e) {
         e.preventDefault();
         $.ajax({
             type: 'POST',
@@ -515,7 +515,7 @@ const handleLogin = function () {
             },
             //error: function
         });
-    });
+    });*/
 };
 
 const handleSignUp = function () {
