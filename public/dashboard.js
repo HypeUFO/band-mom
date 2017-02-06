@@ -119,9 +119,9 @@ function renderLastQuestion() {
         <h4> Venue Address: ${newEvent.venueAddress} </h4>
         <h4> Start Time: ${newEvent.startTime} </h4>
         <h4> Soundcheck Time: ${newEvent.soundCheckTime} </h4>
-        <h4> 1/4" cables: qty: ${newEvent.manifest.quarterInchCables} </h4>
-        <h4> XLR cables: qty: ${newEvent.manifest.xlrCables} </h4>
-        <h4> DI's: qty: ${newEvent.manifest.dIs} </h4>
+        <h4> 1/4" cables: qty: ${newEvent.quarterInchCables} </h4>
+        <h4> XLR cables: qty: ${newEvent.xlrCables} </h4>
+        <h4> DI's: qty: ${newEvent.dIs} </h4>
         <h4> notes: ${newEvent.notes} </h4>`
     );
 };
@@ -130,15 +130,15 @@ function getNewEventData() {
     const input = $(".user-event-input");
     const currentQuestion = QUESTIONS.questions[QUESTIONS.currentQuestion]
     const key = currentQuestion.mapToField;
-    console.log(input);
+    //console.log(input);
     if (currentQuestion.isMultiLine) {
-        NEW_EVENT[key] = {}
+        //NEW_EVENT[key] = {}
         for (let i = 0; i < input.length; i++) {
             let singleVal = input[i].value;
             //if (i < input.length) {
             //    NEW_EVENT[key][currentQuestion.options[i].name] = singleVal;
             // } else {
-            NEW_EVENT[key][currentQuestion.options[i].name] = singleVal;
+            NEW_EVENT[currentQuestion.options[i].name] = singleVal;
             //}
         }
     } else {
@@ -163,7 +163,6 @@ function cancelNewEvent() {
 
 function renderNewEvent() {
     $('.btn-save-event').on('click', function () {
-        console.log(QUESTIONS.manifest);
         console.log(NEW_EVENT);
         saveNewEvent();
         QUESTIONS.currentQuestion = 0;
@@ -184,30 +183,46 @@ function saveNewEvent() {
         url: '/api/event',
         data: NEW_EVENT,
         success: function (data) {
-            $('table').append(
-                `<tr>
+            $('#event-table').append(
+                `<tr id="${data.id}">
                 <td>
-                    <a href="#" class="eventDate" data-type="text" data-pk="1">${data.events[index].eventDate}</a>
+                    <a href="#" class="eventDate" data-type="text" data-pk="1">${data.eventDate}</a>
                 </td>
                 <td>
-                    <a href="#" class="venueName" data-type="text" data-pk="1">${data.events[index].venueName}</a>
+                    <a href="#" class="venueName" data-type="text" data-pk="1">${data.venueName}</a>
                 </td>
                 <td>
-                    <a href="#" class="venueAddress" data-type="text" data-pk="1">${data.events[index].venueAddress}</a>
+                    <a href="#" class="venueAddress" data-type="text" data-pk="1">${data.venueAddress}</a>
                 </td>
                 <td>
-                    <a href="#" class="startTime" data-type="text" data-pk="1">${data.events[index].startTime}</a>
+                    <a href="#" class="startTime" data-type="text" data-pk="1">${data.startTime}</a>
                 </td>
                 <td>
-                    <a href="#" class="soundcheckTime" data-type="text" data-pk="1">${data.events[index].soundCheckTime}</a>
+                    <a href="#" class="soundcheckTime" data-type="text" data-pk="1">${data.soundCheckTime}</a>
                 </td>
                 <td><button class="btn" onclick="deleteEventRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
+            </tr>`);
+            $('#manifest-table').append(
+            `<tr id="${data.id}">
+                <td>
+                    <a href="#" class="event" data-type="text" data-pk="1">${data.eventDate} @ ${data.venueName}</a>
+                </td>
+                <td>
+                    <a href="#" class="quarterInchCables" data-type="text" data-pk="1">${data.quarterInchCables}</a>
+                </td>
+                <td>
+                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.xlrCables}</a>
+                </td>
+                <td>
+                    <a href="#" class="dIs" data-type="text" data-pk="1">${data.dIs}</a>
+                </td>
+                <td><button class="btn" onclick="deleteManifestRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
             </tr>`);
         },
         error: function () {
                 alert('An error occured while processing your request');
-            }
-            //dataType: dataType
+            },
+            dataType: 'json'
     });
 }
 
@@ -330,7 +345,7 @@ function displayEvents(data) {
     }
     for (index in data.events) {
         $('#manifest-table').append(
-            `<tr>
+            `<tr id="${data.events[index].id}">
                 <td>
                     <a href="#" class="event" data-type="text" data-pk="1">${data.events[index].eventDate} @ ${data.events[index].venueName}</a>
                 </td>
@@ -339,6 +354,9 @@ function displayEvents(data) {
                 </td>
                 <td>
                     <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.events[index].manifest.xlrCables}</a>
+                </td>
+                <td>
+                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.events[index].manifest.strings}</a>
                 </td>
                 <td>
                     <a href="#" class="dIs" data-type="text" data-pk="1">${data.events[index].manifest.dIs}</a>

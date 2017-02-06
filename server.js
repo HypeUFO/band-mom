@@ -134,6 +134,7 @@ router.post('/api/event', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: 'Not logged in' });
   }
+  console.log(req.body);
     Event
     .create({
       eventDate: req.body.eventDate,
@@ -141,7 +142,10 @@ router.post('/api/event', (req, res) => {
       venueAddress: req.body.venueAddress,
       startTime: req.body.startTime,
       soundCheckTime: req.body.soundCheckTime,
-      manifest: req.body.manifest,
+      manifest: {'quarterInchCables': req.body.quarterInchCables,
+      'xlrCables': req.body.xlrCables,
+      'strings': req.body.strings,
+      'dIs': req.body.dIs },
       notes: req.body.notes,
       dateCreated: req.body.dateCreated,
       dateModified: req.body.dateModified,
