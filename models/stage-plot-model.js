@@ -7,9 +7,7 @@ mongoose.Promise = global.Promise;
 
 const StagePlotSchema = mongoose.Schema({
     img: {
-        data: Buffer,
-        contentType: String,
-        //required: true
+        type: String
         },
     dateCreated: {
         type: Date

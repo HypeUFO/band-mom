@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="vendor/dropzone-4.3.0/dist/dropzone.css">
+    <link href="vendor/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
@@ -32,7 +33,7 @@
                     <!--<button type="button" class="link btn-logout">log out</button>-->
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="link btn-logout" role="button">Log Out</a>
+                            <a href="/api/logout" class="link btn-logout" role="button">Log Out</a>
                         </li>
                     </ul>
                 </div>
@@ -41,9 +42,9 @@
     </div>
     <div class="container">
         <div class="row">
-            <h3 class="pull-left dashboard-greeting"></h3 class>
+            <h3 class="pull-left col-lg-4" id="dashboard-greeting"></h3>
         </div>
-        <div class="row">
+        <div class="row col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-s-12 col-xs-12">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
                 <li class="active col-lg-4 col-md-4 col-s-4 col-xs-4"><a href="#events" role="tab" data-toggle="tab">Events</a></li>
@@ -51,11 +52,11 @@
                 <li class="col-lg-4 col-md-4 col-s-4 col-xs-4"><a href="#list" role="tab" data-toggle="tab">List</a></li>
             </ul>
             <!-- Tab panes -->
-            <div class="tab-content">
+            <div class="tab-content container">
                 <div class="tab-pane active" id="events">
                     <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-bordered table-striped table-hover">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover" id="event-table">
                                 <thead>
                                     <tr>
                                         <td colspan="5">Events</td>
@@ -109,15 +110,15 @@
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body plot-modal-body">
-                                   <form action="/api/stage-plot" class="dropzone" id="upload-plot" name="upload-plot">
+                                   <form action="/api/stage-plot" class="dropzone" id="upload-plot" name="uploadPlot" enctype="multipart/form-data">
                                         <div class="fallback">
                                             <input name="stagePlot" type="file" multiple />
                                         </div>
                                         </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-primary btn-save-plot">Save</button>
+                                    <button type="button" class="btn btn-default btn-cancel-plot" data-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary btn-done-plot hide">Done</button>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +127,23 @@
                             target="_blank">here</a></h4>
                 </div>
                 <div class="tab-pane" id="list">
-                    <ul id="manifest-list"></ul>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover" id="manifest-table">
+                            <thead>
+                                <tr>
+                                    <td colspan="5">Manifest</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th class="col-md-2 text-center">Gig</td>
+                                        <th class="text-center">1/4" Cables</td>
+                                            <th class="text-center">XLR Cables</td>
+                                                <th class="text-center">DI's</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,7 +152,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js"></script>
     <script src="vendor/dropzone-4.3.0/dist/dropzone.js"></script>
-    <script type="text/javascript" src="app.js"></script>
+    <script src="vendor/bootstrap-editable/js/bootstrap-editable.js"></script>
+    <script type="text/javascript" src="dashboard.js"></script>
 </body>
 
 </html>

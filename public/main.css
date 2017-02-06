@@ -314,13 +314,18 @@ label {
   background-position: 0 -29px;
 }*/
 
+.table-responsive
+{
+    overflow-x: auto;
+    max-width: 100%;
+}
 
 .hide {
     display: none;
 }
 
 #manifest-list {
-    margin-top: 75px;
+    margin-top: 50px;
 }
 
 .manifest-item {
@@ -336,4 +341,16 @@ label {
     z-index: 1;
     opacity: 0.9;
     background: url('images/page-loader.gif') 50% 50% no-repeat rgb(249, 249, 249);
+}
+#loginModalBtn {
+    display: none;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 768px) {
+    #loginDropdown {
+    display: none;
+  }
+  #loginModalBtn {
+    display: block;
+  }
 }

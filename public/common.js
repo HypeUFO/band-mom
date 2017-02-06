@@ -1,5 +1,6 @@
 
 // using mock data until API is created
+/*
 const MOCK_EVENTS = {
     "events": [{
         "eventDate": "February 2, 2017",
@@ -110,7 +111,7 @@ const MOCK_STAGE_PLOT = {
         "dateModified": "January 16, 2017"
     }]
 };
-
+*/
 
 // NEW EVENT SETUP GUIDE
 
@@ -239,22 +240,7 @@ function renderLastQuestion() {
         <h4> DI's: qty: ${newEvent.manifest.dIs} </h4>
         <h4> notes: ${newEvent.notes} </h4>`
     );
-}
-/*
-function getNewEventData() {
-    var input = document.getElementsByClassName("user-event-input");
-
-    for (i of input) {
-        //extract the value of input elements
-        var singleVal = i.value;
-        if (singleVal !== "" && singleVal !== undefined) {
-            QUESTIONS.manifest.push(singleVal);
-        }
-    }
-    console.log(QUESTIONS.manifest);
-
-}
-*/
+};
 
 function getNewEventData() {
     const input = $(".user-event-input");
@@ -307,7 +293,6 @@ function renderNewEvent() {
 function saveNewEvent() {
     NEW_EVENT.dateCreated = new Date;
     NEW_EVENT.dateModified = new Date;
-    NEW_EVENT.userId = User.userId;
     console.log(NEW_EVENT);
 
     $.ajax({
@@ -345,12 +330,13 @@ function getEvents(callbackFn) {
         type: "GET",
         url: '/api/event',
         data: {
-            userId: User._id
+            userId: req.user.id
         },
         success: function(data) {
             console.log(data);
             callbackFn(data);
-        }
+        },
+        //error:
     });
         //console.log(data);
         //callbackFn(data)
@@ -409,9 +395,18 @@ $('.btn-save-plot').on('click', function () {
 // GET STAGE PLOT AT LOGIN
 
 function getStagePlots(callbackFn) {
-    setTimeout(function () {
-        callbackFn(MOCK_STAGE_PLOT)
-    }, 1);
+    $.ajax({
+        type: "GET",
+        url: '/api/stage-plot',
+        data: {
+            userId: req.user.id
+        },
+        success: function(data) {
+            console.log(data);
+            callbackFn(data);
+        },
+        //error:
+    });
 }
 
 // this function stays the same when we connect
@@ -496,9 +491,9 @@ function getAndDisplayManifest() {
 
 
 // LOGIN AUTH
-
+/*
 const handleLogin = function () {
-    /*$('.btn-login').on('click', function (e) {
+    $('.btn-login').on('click', function (e) {
         e.preventDefault();
         $.ajax({
             type: 'POST',
@@ -515,8 +510,8 @@ const handleLogin = function () {
             },
             //error: function
         });
-    });*/
-};
+    });
+};*/
 
 const handleSignUp = function () {
     $('#btn-signup').click(function () {
@@ -604,20 +599,23 @@ function validateSignUp() {
         }*/
     });
 }
-
+/*
 const handleLogout = function () {
     $('.btn-logout').click(function () {
-        window.location.href = "index.html";
+        $.ajax({
+            type: 'GET',
+            url: '/api/logout'
+        });
     })
 };
-
+*/
 
 
 //  on page load do this
 $(document).ready(function () {
-    handleLogin();
+    //handleLogin();
     handleSignUp();
-    handleLogout();
+    //handleLogout();
     renderFirstQuestion();
     renderNextQuestion();
     cancelNewEvent()

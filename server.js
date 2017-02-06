@@ -8,6 +8,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash');
+const multer  = require('multer');
 
 mongoose.Promise = global.Promise;
 
@@ -22,17 +23,17 @@ app.use(express.static('public'));
 
 app.use(bodyParser.json());
 
-app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan('dev'));
 //app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
-/*app.use(session({secret: 'anystringoftext',
+app.use(session({secret: 'anystringoftext',
 				 saveUninitialized: true,
 				 resave: true}));
-         */
 app.use(cookieParser());
-app.use(session({ secret: 'keyboard cat' }));
+app.use(flash());
+
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 //app.use(flash());
@@ -41,7 +42,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(morgan('common'));
 
 const localStrategy = new LocalStrategy(function(username, password, callback) {
-  console.log('enter local strategy', username, password);
+  //console.log('enter local strategy', username, password);
   let user;
   User
     .findOne({userName: username})
@@ -94,8 +95,11 @@ router.get('/dashboard', (req, res) => {
 // GET Event
 
 router.get('/api/event', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
   Event
-    .find()
+    .find({ userId: req.user.id })
     .exec()
     .then(events => {
       res.json({
@@ -111,6 +115,9 @@ router.get('/api/event', (req, res) => {
 });
 
 router.get('/api/event/:id', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
   Event
     .findById(req.params.id)
     .exec()
@@ -124,6 +131,9 @@ router.get('/api/event/:id', (req, res) => {
 // CREATE Event
 
 router.post('/api/event', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
     Event
     .create({
       eventDate: req.body.eventDate,
@@ -135,7 +145,7 @@ router.post('/api/event', (req, res) => {
       notes: req.body.notes,
       dateCreated: req.body.dateCreated,
       dateModified: req.body.dateModified,
-      userId: req.body.userId
+      userId: req.user.id
     })
     .then(
       event => res.status(201).json(event.apiRepr()))
@@ -149,6 +159,9 @@ router.post('/api/event', (req, res) => {
 // UPDATE Event
 
 router.put('/api/event/:id', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
   // ensure that the id in the request path and the one in request body match
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     const message = (
@@ -177,6 +190,9 @@ router.put('/api/event/:id', (req, res) => {
 // DELETE EVENT
 
 router.delete('/api/event/:id', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
   Event
   .findByIdAndRemove(req.params.id)
   .exec()
@@ -189,8 +205,11 @@ router.delete('/api/event/:id', (req, res) => {
 // GET STAGE PLOT
 
 router.get('/api/stage-plot', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
   StagePlot
-    .find()
+    .find({ userId: req.user._id })
     .exec()
     .then(stageplots => {
       res.json({
@@ -206,6 +225,9 @@ router.get('/api/stage-plot', (req, res) => {
 });
 
 router.get('/api/stage-plot/:id', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
   StagePlot
     .findById(req.params.id)
     .exec()
@@ -218,24 +240,38 @@ router.get('/api/stage-plot/:id', (req, res) => {
 
 // CREATE STAGE PLOT
 
+var storage = multer.diskStorage({
+  destination: 'public/stage-plots',
+  filename: function (req, file, cb) {
+    console.log(file);
+    cb(null, Date.now() + '-' + file.originalname );
+  }
+});
+
+var upload = multer({ storage: storage });
 
 
-router.post('/api/stage-plot', (req, res) => {
+
+router.route('/api/stage-plot')
+.all(upload.single('stageplot'))
+.post( (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
     StagePlot
     .create({
-      img: req.body.img,
-      dateCreated: req.body.dateCreated,
-      dateModified: req.body.dateModified,
-      userId: req.body.userId,
+      img: req.file.filename,
+      dateCreated: new Date,
+      dateModified: req.file.lastModifiedDate,
+      userId: req.user.id
     })
     .then(
       stageplot => res.status(201).json(stageplot.apiRepr()))
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'});
-    });
+    }); 
 });
-
 
 // USERS
 
@@ -265,7 +301,22 @@ router.post('/api/user', (req, res) => {
 
   // User Login
 
-router.post('/api/login', 
+  router.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/public/login.html');
+});
+
+router.get('/dashboard', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
+  console.log(req.user.apiRepr());
+  //res.sendStatus(200).json({ user: req.user.apiRepr() });
+  res.sendFile(__dirname + '/public/dashboard.html', {
+    user: req.user.apiRepr()
+  });
+})
+
+router.post('/api/login',
   passport.authenticate('local', {session: true, successRedirect: '/dashboard', failureRedirect: '/login'}),
   (req, res) => {
   console.log('test login');
@@ -295,15 +346,11 @@ router.post('/api/login',
     });*/
 });
 
-router.get('/login', (req, res) => {
-  res.sendFile('/login.html');
-});
 
-router.get('/dashboard', passport.authenticate('local', {session: true}), (req, res) => {
-  console.log('test');
-  res.sendFile(__dirname + '/dashboard.html');
+router.get('/api/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
-
 
 
 

@@ -32,17 +32,38 @@
                 <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Log In<span class="caret"></span></a>
+                            <a href="#" id="loginDropdown" class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Log In<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <form class="navbar-form navbar-right login-form" role="search" action="/api/login" method="post">
-                                    <div class="form-group has-danger">
+                                    <div class="form-group">
                                         <input type="text" class="form-control login-email" name="username" placeholder="username">
                                         <input type="password" class="form-control login-password" name="password" placeholder="password">
-                                        <div class="form-control-feedback hide">Log in failed. Please try again.</div>
-                                        <button type="submit" class="btn btn-default btn-login">log in</button>
+                                        <button type="submit" class="btn btn-primary btn-login pull-right">log in</button>
                                     </div>
                                 </form>
                             </ul>
+                        </li>
+                        <li>
+                            <!-- Button HTML (to Trigger Modal) -->
+                            <a href="#loginModal" id="loginModalBtn" role="button" class="link" data-toggle="modal">Log In</a>
+                            <!-- Modal HTML -->
+                            <div id="loginModal" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Log In</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <form id="login-form" role="search" action="/api/login" method="post">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control login-email" name="username" placeholder="username">
+                                                <input type="password" class="form-control login-password" name="password" placeholder="password">
+                                                <button type="submit" class="btn btn-primary btn-login pull-right">log in</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <li>
                             <!-- Button HTML (to Trigger Modal) -->
@@ -115,6 +136,7 @@
         </div>
     </div>
     <div class="container">
+        <div class="col-lg-10 col-lg-offset-1">
         <p id="websiteSlogan">Become the most organized band in town!</p>
         <!-- Carousel -->
         <div id="theCarousel" class="carousel slide" data-ride="carousel">
@@ -160,13 +182,13 @@
             </a>
         </div>
         <!-- <button type="submit" class="btn btn-lg sign-up-button js-sign-up-button">sign up</button>-->
-        <h5>Already have an account? <a href="/login.html" role="button">Log in</a></h5>
+        <h5>Already have an account? <a href="/login" role="button">Log in</a></h5>
+    </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js"></script>
-    <script src="vendor/dropzone-4.3.0/dist/dropzone.js"></script>
-    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="index.js"></script>
 </body>
 
 </html>
