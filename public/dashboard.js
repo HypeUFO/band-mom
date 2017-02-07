@@ -205,16 +205,19 @@ function saveNewEvent() {
             $('#manifest-table').append(
             `<tr id="${data.id}">
                 <td>
-                    <a href="#" class="event" data-type="text" data-pk="1">${data.eventDate} @ ${data.venueName}</a>
+                    <a href="#" class="event" data-type="text" data-pk="1">${data.eventDate} @ ${data.manifest.venueName}</a>
                 </td>
                 <td>
-                    <a href="#" class="quarterInchCables" data-type="text" data-pk="1">${data.quarterInchCables}</a>
+                    <a href="#" class="quarterInchCables" data-type="text" data-pk="1">${data.manifest.quarterInchCables}</a>
                 </td>
                 <td>
-                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.xlrCables}</a>
+                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.manifest.xlrCables}</a>
                 </td>
                 <td>
-                    <a href="#" class="dIs" data-type="text" data-pk="1">${data.dIs}</a>
+                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.manifest.strings}</a>
+                </td>
+                <td>
+                    <a href="#" class="dIs" data-type="text" data-pk="1">${data.manifest.dIs}</a>
                 </td>
                 <td><button class="btn" onclick="deleteManifestRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
             </tr>`);
@@ -312,8 +315,6 @@ function getEvents(callbackFn) {
     //callbackFn(data)
 
 };
-
-
 
 
 
