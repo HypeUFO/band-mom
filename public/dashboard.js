@@ -275,20 +275,39 @@ function deleteManifestRow(r) {
 }
 
 
-function bind_editable_to_column(table_selector,column_selector,ajax_url,title,options) {
+function bind_editable_to_column(table_selector,column_selector,title,options) {
   options = typeof options !== 'undefined' ? options : ''; //assigning source to empty when not specified. source is only used for select.
   $(table_selector).editable({
+      params: function(params) {  //params already contain `name`, `value` and `pk`
+    var data = {};
+    data['id'] = params.pk;
+    data[title] = params.value;
+    console.log(data);
+    return data;
+  },
     selector: column_selector,
-    url: ajax_url,
-    title: title,
     ajaxOptions: {
       type: 'PUT',
       dataType: 'json'
     },
-    source: options
+    //source: options
   });
 }
 
+// DATE
+function initDatePicker() {
+var date_input=$('.date');
+      var container=$('#events').length>0 ? $('#events').parent() : "body";
+      var options={
+        //format: 'mm/dd/yy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'bottom'
+      };
+      date_input.datepicker(options);
+      //date_input.datepicker();
+};
 // GET USER EVENTS ON LOGIN
 
 // this function's name and argument can stay the
@@ -303,7 +322,7 @@ function getEvents(callbackFn) {
         type: "GET",
         url: '/api/event',
         data: {
-            userId: this.id
+            id: this.id
         },
         success: function (data) {
             console.log(data);
@@ -318,7 +337,6 @@ function getEvents(callbackFn) {
 
 
 
-
 // this function stays the same when we connect
 // to real API later
 function displayEvents(data) {
@@ -326,89 +344,67 @@ function displayEvents(data) {
         $('#event-table').append(
             `<tr id="${data.events[index].id}">
                 <td>
-                    <a href="#" class="eventDate" data-type="text" data-pk="1">${data.events[index].eventDate}</a>
+                    <a href="#" class="eventDate date" data-type="date" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].eventDate}</a>
                 </td>
                 <td>
-                    <a href="#" class="venueName" data-type="text" data-pk="1">${data.events[index].venueName}</a>
+                    <a href="#" class="venueName" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].venueName}</a>
                 </td>
                 <td>
-                    <a href="#" class="venueAddress" data-type="text" data-pk="1">${data.events[index].venueAddress}</a>
+                    <a href="#" class="venueAddress" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].venueAddress}</a>
                 </td>
                 <td>
-                    <a href="#" class="startTime" data-type="text" data-pk="1">${data.events[index].startTime}</a>
+                    <a href="#" class="startTime" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].startTime}</a>
                 </td>
                 <td>
-                    <a href="#" class="soundcheckTime" data-type="text" data-pk="1">${data.events[index].soundCheckTime}</a>
+                    <a href="#" class="soundCheckTime" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].soundCheckTime}</a>
                 </td>
                 <td><button class="btn" onclick="deleteEventRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
             </tr>`);
             //return data;
+
     }
     for (index in data.events) {
         $('#manifest-table').append(
             `<tr id="${data.events[index].id}">
                 <td>
-                    <a href="#" class="event" data-type="text" data-pk="1">${data.events[index].eventDate} @ ${data.events[index].venueName}</a>
+                    <a href="#" class="event" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].eventDate} @ ${data.events[index].venueName}</a>
                 </td>
                 <td>
-                    <a href="#" class="quarterInchCables" data-type="text" data-pk="1">${data.events[index].manifest.quarterInchCables}</a>
+                    <a href="#" class="quarterInchCables" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].manifest.quarterInchCables}</a>
                 </td>
                 <td>
-                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.events[index].manifest.xlrCables}</a>
+                    <a href="#" class="xlrCables" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].manifest.xlrCables}</a>
                 </td>
                 <td>
-                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.events[index].manifest.strings}</a>
+                    <a href="#" class="xlrCables" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].manifest.strings}</a>
                 </td>
                 <td>
-                    <a href="#" class="dIs" data-type="text" data-pk="1">${data.events[index].manifest.dIs}</a>
+                    <a href="#" class="dIs" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].manifest.dIs}</a>
                 </td>
                 <td><button class="btn" onclick="deleteManifestRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
             </tr>`);
-    }
-    bind_editable_to_column('#event-table', 'tr td a.eventDate', '/api/event/' + data.events[index].id, 'Event Date');
-    bind_editable_to_column('#event-table', 'tr td a.venueName', '/api/event/' + data.events[index].id, 'Venue Name');
-    bind_editable_to_column('#event-table', 'tr td a.venueAddress', '/api/event/' + data.events[index].id, 'Venue Address');
-    bind_editable_to_column('#event-table', 'tr td a.startTime', '/api/event/' + data.events[index].id, 'Start Time');
-    bind_editable_to_column('#event-table', 'tr td a.soundcheckTime', '/api/event/' + data.events[index].id, 'Soundcheck Time');
+    };
+    bind_editable_to_column('#event-table', 'tr td a.eventDate', 'eventDate');
+    bind_editable_to_column('#event-table', 'tr td a.venueName', 'venueName');
+    bind_editable_to_column('#event-table', 'tr td a.venueAddress', 'venueAddress');
+    bind_editable_to_column('#event-table', 'tr td a.startTime', 'startTime');
+    bind_editable_to_column('#event-table', 'tr td a.soundCheckTime', 'soundCheckTime');
 
-    bind_editable_to_column('#manifest-table', 'tr td a.event', '/api/event/' + data.events[index].id, 'Event');
-    bind_editable_to_column('#manifest-table', 'tr td a.quarterInchCables', '/api/event/' + data.events[index].id, '1/4" Cables');
-    bind_editable_to_column('#manifest-table', 'tr td a.xlrCables', '/api/event/' + data.events[index].id, 'XLR Cables');
-    bind_editable_to_column('#manifest-table', 'tr td a.dIs', '/api/event/' + data.events[index].id, 'DIs');
-}
+    bind_editable_to_column('#manifest-table', 'tr td a.event', 'event');
+    bind_editable_to_column('#manifest-table', 'tr td a.quarterInchCables', 'quarterInchCables');
+    bind_editable_to_column('#manifest-table', 'tr td a.xlrCables', 'xlrCables');
+    bind_editable_to_column('#manifest-table', 'tr td a.dIs', 'dIs');
 
-// this function can stay the same even when we
-// are connecting to real API
+    $('#event-table').footable();
+    $('#manifest-table').footable();
+};
+
+
+
 function getAndDisplayEvents() {
     getEvents(displayEvents);
 
-}
-/*
-$('.btn-delete-event').on('click', function(rowid) {
-    var row = document.getElementById(rowid);
-    row.parentNode.removeChild(row);
-})
-*/
-// LOAD NEW STAGE PLOT
-/*
-function loadImageFileAsURL() {
-    var filesSelected = document.getElementById("inputFileToLoad").files;
-    if (filesSelected.length > 0) {
-        var fileToLoad = filesSelected[0];
-
-        if (fileToLoad.type.match("image.*")) {
-            var fileReader = new FileReader();
-            fileReader.onload = function (fileLoadedEvent) {
-                var imageLoaded = document.getElementById("stage-plot-img")
-                imageLoaded.src = fileLoadedEvent.target.result;
-                document.body.append(imageLoaded.src);
-            };
-            fileReader.readAsDataURL(fileToLoad);
-        };
-    };
 };
-*/
-
 
 $('.btn-done-plot').on('click', function () {
     $('#upload-plot-modal').modal('hide');
@@ -430,14 +426,19 @@ function getStagePlots(callbackFn) {
     });
 }
 
-// this function stays the same when we connect
-// to real API later
+
 function displayStagePlots(data) {
-    console.log(data);
     for (const stagePlot of data.stageplots) {
-        var imageLoaded = document.getElementById("stage-plot-img")
-        imageLoaded.src = '/stage-plots/' + stagePlot.img;
-        document.body.append(imageLoaded.src);
+        console.log(stagePlot.id);
+        var imageLoaded = document.getElementById("stage-plot")
+        $('#stage-plot').prepend(
+            `<div class="img-wrap">
+                        <span class="del-plot close">&times;</span>
+                        <img src="/stage-plots/${stagePlot.img}" id="${stagePlot.id}" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
+                    </div>`
+        );
+        //imageLoaded.src = '/stage-plots/' + stagePlot.img;
+        //document.body.append(imageLoaded.src);
     };
 };
 
@@ -483,6 +484,27 @@ Dropzone.options.uploadPlot = {
     }
 };
 
+function deleteStagePlot(plot) {
+    $('.del-plot').on('click', function(){
+    if (confirm('Are you sure?')) {
+        $.ajax({
+        type: "DELETE",
+        url: '/api/stage-plot/' + $(this).closest('img.id'),
+        success: function () {
+
+        },
+        error: function () {
+                alert('An error occured while processing your request');
+            }
+    });
+    //var i = r.parentNode.parentNode.rowIndex;
+            //document.getElementById("event-table").deleteRow(i);
+} else {
+    return;
+    // Do nothing
+}
+})
+}
 
 const handleLogout = function () {
     $('.btn-logout').click(function () {
@@ -494,20 +516,22 @@ const handleLogout = function () {
 };
 
 const greeting = function () {
-    $('#dashboard-greeting').append(`Hello`);
+    $('#dashboard-greeting').append(`Hello ${this.userName}`);
 }
 
 //turn to inline mode
-$.fn.editable.defaults.mode = 'inline';
+//$.fn.editable.defaults.mode = 'inline';
+
 
 
 
 
 $(document).ready(function () {
-    greeting();
+    //greeting();
     getAndDisplayEvents();
     getAndDisplayStagePlots();
     //getAndDisplayManifest();
+    deleteStagePlot();
     renderFirstQuestion();
     renderNextQuestion();
     cancelNewEvent();

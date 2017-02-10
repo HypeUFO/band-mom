@@ -42,7 +42,6 @@ app.use(passport.session()); // persistent login sessions
 app.use(morgan('common'));
 
 const localStrategy = new LocalStrategy(function(username, password, callback) {
-  //console.log('enter local strategy', username, password);
   let user;
   User
     .findOne({userName: username})
@@ -174,9 +173,10 @@ router.put('/api/event/:id', (req, res) => {
     console.error(message);
     res.status(400).json({message: message});
   }
-
+  console.log(req.params);
+  console.log(req.body);
   const toUpdate = {dateModified: new Date};
-  const updateableFields = ['eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes'];
+  const updateableFields = ['eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes', 'dateModified'];
 
   updateableFields.forEach(field => {
     if (field in req.body) {
@@ -266,7 +266,7 @@ router.route('/api/stage-plot')
     .create({
       img: req.file.filename,
       dateCreated: new Date,
-      dateModified: req.file.lastModifiedDate,
+      dateModified: new Date,
       userId: req.user.id
     })
     .then(
@@ -323,32 +323,8 @@ router.get('/dashboard', (req, res) => {
 router.post('/api/login',
   passport.authenticate('local', {session: true, successRedirect: '/dashboard', failureRedirect: '/login'}),
   (req, res) => {
-  console.log('test login');
-  /*if (!req.body.username) {
-    req.sendStatus(400);
-  }
-  User
-    .findOne({userName: req.body.username})
-    .then(user =>  {
-      console.log('validating')
-      return {
-        user,
-        isValid: user.validatePassword(req.body.password)
-      }
-    })
-    .then(data => {
-      console.log('is valid', data.isValid)
-      //res.redirect('/dashboard');
-      return data.isValid ? res.status(200).json(data.user.apiRepr()) : res.sendStatus(400);
-})*/
-/*
-    .catch(err => {
-      res.status(401).json({
-        message: 'login failed',
-        err: err
-      });
-    });*/
-});
+
+  });
 
 
 router.get('/api/logout', function(req, res){

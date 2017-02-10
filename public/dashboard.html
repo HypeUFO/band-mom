@@ -10,7 +10,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="vendor/dropzone-4.3.0/dist/dropzone.css">
-    <link href="vendor/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="vendor/footable-bootstrap.latest/css/footable.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
@@ -55,21 +57,19 @@
             <div class="tab-content container">
                 <div class="tab-pane active" id="events">
                     <div class="row">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover" id="event-table">
+                        <div>
+                            <table class="table table-bordered table-striped table-hover toggle-arrow-alt" id="event-table">
                                 <thead>
-                                    <tr>
-                                        <td colspan="5">Events</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
                                     <tr>
                                         <th class="col-md-2 text-center">Date</td>
                                         <th class="text-center">Venue Name</td>
-                                        <th class="text-center">Venue Address</td>
+                                        <th class="text-center" data-breakpoints="xs sm">Venue Address</td>
                                         <th class="text-center">Start Time</td>
-                                        <th class="text-center">Soundcheck Time</td>
+                                        <th class="text-center" data-breakpoints="xs sm">Soundcheck Time</td>
+                                        <th class="text-center"></td>
                                     </tr>
+                                    </thead>
+                                    <tbody>
                                 </tbody>
                             </table>
                             <!-- Button HTML (to Trigger Modal) -->
@@ -99,7 +99,10 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="stage-plot">
-                    <img id="stage-plot-img" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
+                    <!--<div class="img-wrap">
+                        <span id="del-plot" class="close">&times;</span>
+                        <img id="stage-plot-img" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
+                    </div>-->
                     <h2>Upload your stage plot</h2>
                     <a href="#upload-plot-modal" role="button" class="btn btn-primary btn-lg upload-btn" data-toggle="modal">Upload</a>
                     <div id="upload-plot-modal" class="modal fade col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-s-12 col-xs-12">
@@ -128,20 +131,18 @@
                 </div>
                 <div class="tab-pane" id="list">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover" id="manifest-table">
+                        <table class="table table-bordered table-striped table-hover toggle-arrow-alt" id="manifest-table">
                             <thead>
                                 <tr>
-                                    <td colspan="5">Manifest</td>
+                                    <th class="col-md-2 text-center">Gig</td>
+                                        <th class="text-center" data-breakpoints="xs sm">1/4" Cables</td>
+                                            <th class="text-center" data-breakpoints="xs sm">XLR Cables</td>
+                                            <th class="text-center" data-breakpoints="xs sm">Strings</td>
+                                                <th class="text-center" data-breakpoints="xs sm">DI's</td>
+                                                <th class="text-center" data-breakpoints="xs sm"></td>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th class="col-md-2 text-center">Gig</td>
-                                        <th class="text-center">1/4" Cables</td>
-                                            <th class="text-center">XLR Cables</td>
-                                            <th class="text-center">Strings</td>
-                                                <th class="text-center">DI's</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -150,10 +151,13 @@
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js"></script>
     <script src="vendor/dropzone-4.3.0/dist/dropzone.js"></script>
-    <script src="vendor/bootstrap-editable/js/bootstrap-editable.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <script src="vendor/footable-bootstrap.latest/js/footable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="dashboard.js"></script>
 </body>
 

@@ -25,7 +25,8 @@ StagePlotSchema.methods.apiRepr = function () {
     return {
         img: this.img || 'Upload a stage plot',
         dateCreated: this.dateCreated || '',
-        dateModified: this.dateModified || ''
+        dateModified: this.dateModified || '',
+        id: this.id || ''
     };
 };
 
