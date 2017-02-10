@@ -484,27 +484,9 @@ Dropzone.options.uploadPlot = {
     }
 };
 
-function deleteStagePlot(plot) {
-    $('.del-plot').on('click', function(){
-    if (confirm('Are you sure?')) {
-        $.ajax({
-        type: "DELETE",
-        url: '/api/stage-plot/' + $(this).closest('img.id'),
-        success: function () {
 
-        },
-        error: function () {
-                alert('An error occured while processing your request');
-            }
-    });
-    //var i = r.parentNode.parentNode.rowIndex;
-            //document.getElementById("event-table").deleteRow(i);
-} else {
-    return;
-    // Do nothing
-}
-})
-}
+
+
 
 const handleLogout = function () {
     $('.btn-logout').click(function () {
@@ -527,6 +509,25 @@ const greeting = function () {
 
 
 $(document).ready(function () {
+    $('#stage-plot').on('click', '.del-plot', function () {
+        if (confirm('Are you sure?')) {
+            $.ajax({
+                type: "DELETE",
+                url: '/api/stage-plot/' + $(this).closest('img.id'),
+                success: function () {
+
+                },
+                error: function () {
+                    alert('An error occured while processing your request');
+                }
+            });
+            //var i = r.parentNode.parentNode.rowIndex;
+            //document.getElementById("event-table").deleteRow(i);
+        } else {
+            return;
+            // Do nothing
+        }
+    })
     //greeting();
     getAndDisplayEvents();
     getAndDisplayStagePlots();
