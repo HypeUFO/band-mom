@@ -242,6 +242,18 @@ router.get('/api/stage-plot/:id', (req, res) => {
     });
 });
 
+router.delete('/api/stage-plot/:id', (req, res) => {
+  console.log(req.params.id);
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
+  StagePlot
+  .findByIdAndRemove(req.params.id)
+  .exec()
+  .then(stageplot => res.status(204).end())
+  .catch(err => res.status(500).json({message: 'Internal server error'}));
+})
+
 // CREATE STAGE PLOT
 
 var storage = multer.diskStorage({

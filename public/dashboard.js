@@ -428,17 +428,14 @@ function getStagePlots(callbackFn) {
 
 
 function displayStagePlots(data) {
+    $('#stage-plot-img-container').empty();
     for (const stagePlot of data.stageplots) {
-        console.log(stagePlot.id);
-        var imageLoaded = document.getElementById("stage-plot")
-        $('#stage-plot').prepend(
+        $('#stage-plot-img-container').prepend(
             `<div class="img-wrap">
                         <span class="del-plot close">&times;</span>
                         <img src="/stage-plots/${stagePlot.img}" id="${stagePlot.id}" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
                     </div>`
         );
-        //imageLoaded.src = '/stage-plots/' + stagePlot.img;
-        //document.body.append(imageLoaded.src);
     };
 };
 
@@ -484,7 +481,9 @@ Dropzone.options.uploadPlot = {
     }
 };
 
-
+$('.btn-done-plot').on('click', function(){
+    getAndDisplayStagePlots();
+})
 
 
 
@@ -507,15 +506,16 @@ const greeting = function () {
 
 
 
-
 $(document).ready(function () {
     $('#stage-plot').on('click', '.del-plot', function () {
+        console.log($(this).siblings('img').prop('id'));
         if (confirm('Are you sure?')) {
             $.ajax({
                 type: "DELETE",
-                url: '/api/stage-plot/' + $(this).closest('img.id'),
+                url: '/api/stage-plot/' + $(this).siblings('img').prop('id'),
                 success: function () {
-
+                    alert("success test");
+                    getAndDisplayStagePlots();
                 },
                 error: function () {
                     alert('An error occured while processing your request');
@@ -532,7 +532,7 @@ $(document).ready(function () {
     getAndDisplayEvents();
     getAndDisplayStagePlots();
     //getAndDisplayManifest();
-    deleteStagePlot();
+   // deleteStagePlot();
     renderFirstQuestion();
     renderNextQuestion();
     cancelNewEvent();
