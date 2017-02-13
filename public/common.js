@@ -614,6 +614,7 @@ const handleLogout = function () {
 //  on page load do this
 $(document).ready(function () {
     //handleLogin();
+    displayErrorMsg()
     handleSignUp();
     //handleLogout();
     renderFirstQuestion();
