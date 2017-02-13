@@ -117,9 +117,9 @@ const handleLogin = function () {
 };
 */
 
+
 //  on page load do this
 $(document).ready(function () {
-    $('.tooltip').tooltip();
     handleSignUp();
     //handleLogin();
     //handleLogout();
