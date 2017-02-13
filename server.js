@@ -9,6 +9,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash');
 const multer  = require('multer');
+const fs = require('fs');
 
 mongoose.Promise = global.Promise;
 
@@ -243,15 +244,24 @@ router.get('/api/stage-plot/:id', (req, res) => {
 });
 
 router.delete('/api/stage-plot/:id', (req, res) => {
-  console.log(req.params.id);
   if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: 'Not logged in' });
+    return res.status(401).json({
+      message: 'Not logged in'
+    });
   }
   StagePlot
-  .findByIdAndRemove(req.params.id)
-  .exec()
-  .then(stageplot => res.status(204).end())
-  .catch(err => res.status(500).json({message: 'Internal server error'}));
+    .findByIdAndRemove(req.params.id)
+    .exec()
+    .then(stageplot => {
+      fs.unlink('./public/stage-plots/' + req.body.img, (err) => {
+        if (err) throw err;
+        console.log('successfully deleted public/stage-plots' + req.body.img);
+      });
+      res.status(204).end()
+    })
+    .catch(err => res.status(500).json({
+      message: 'Internal server error'
+    }));
 })
 
 // CREATE STAGE PLOT
@@ -325,6 +335,9 @@ router.get('/dashboard', (req, res) => {
   if (!req.isAuthenticated()) {
     res.redirect('/login');
     return res.status(401).json({ message: 'Not logged in' });
+  }
+  if (req.body.userName === 'demo' && req.isAuthenticated()) {
+    //seedDemoInfo();
   }
   console.log(req.user.apiRepr());
   //res.sendStatus(200).json({ user: req.user.apiRepr() });

@@ -233,45 +233,41 @@ function saveNewEvent() {
 
 function deleteEventRow(r) {
     var i = r.parentNode.parentNode;
-    //console.log(id);
     if (confirm('Are you sure you want to delete this event?')) {
         $.ajax({
-        type: "DELETE",
-        url: '/api/event/' + i.id,
-        success: function () {
-            document.getElementById("event-table").deleteRow(i.rowIndex);
-        },
-        error: function () {
+            type: "DELETE",
+            url: '/api/event/' + i.id,
+            success: function () {
+                document.getElementById("event-table").deleteRow(i.rowIndex);
+            },
+            error: function () {
                 alert('An error occured while processing your request');
             }
-    });
-    //var i = r.parentNode.parentNode.rowIndex;
-            //document.getElementById("event-table").deleteRow(i);
-} else {
-    return;
-    // Do nothing
-}
+        });
+    } else {
+        return;
+        // Do nothing
+    }
 };
 
 function deleteManifestRow(r) {
     var i = r.parentNode.parentNode;
     if (confirm('Are you sure you want to delete this?')) {
         $.ajax({
-        type: "DELETE",
-        url: '/api/event/' + i.id,
-        success: function () {
-            document.getElementById("manifest-table").deleteRow(i.rowIndex);
-        },
-        error: function () {
+            type: "DELETE",
+            url: '/api/event/' + i.id,
+            success: function () {
+                document.getElementById("manifest-table").deleteRow(i.rowIndex);
+            },
+            error: function () {
                 alert('An error occured while processing your request');
             }
-    });
-    //var i = r.parentNode.parentNode.rowIndex;
-    
-} else {
-    return;
-    // Do nothing
-}
+        });
+
+    } else {
+        return;
+        // Do nothing
+    }
 }
 
 
@@ -299,7 +295,7 @@ function initDatePicker() {
 var date_input=$('.date');
       var container=$('#events').length>0 ? $('#events').parent() : "body";
       var options={
-        //format: 'mm/dd/yy',
+        format: 'mm/dd/yy',
         container: container,
         todayHighlight: true,
         autoclose: true,
@@ -433,7 +429,7 @@ function displayStagePlots(data) {
         $('#stage-plot-img-container').prepend(
             `<div class="img-wrap">
                         <span class="del-plot close">&times;</span>
-                        <img src="/stage-plots/${stagePlot.img}" id="${stagePlot.id}" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
+                        <img src="/stage-plots/${stagePlot.img}" id="${stagePlot.id}" name="${stagePlot.img}"class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
                     </div>`
         );
     };
@@ -502,37 +498,42 @@ const greeting = function () {
 
 //turn to inline mode
 //$.fn.editable.defaults.mode = 'inline';
-
-
-
-
-$(document).ready(function () {
-    $('#stage-plot').on('click', '.del-plot', function () {
+/*
+function deletePlotImg() {
+    var path = '/public';
+    var img = path + $(this).siblings('img').prop('src');
+    img.Delete();
+}
+*/
+function deleteStagePlot() {
+$('#stage-plot').on('click', '.del-plot', function () {
         console.log($(this).siblings('img').prop('id'));
         if (confirm('Are you sure?')) {
             $.ajax({
                 type: "DELETE",
                 url: '/api/stage-plot/' + $(this).siblings('img').prop('id'),
+                data: {img: $(this).siblings('img').prop('name')},
                 success: function () {
-                    alert("success test");
+                    //deletePlotImg();
                     getAndDisplayStagePlots();
                 },
                 error: function () {
                     alert('An error occured while processing your request');
                 }
             });
-            //var i = r.parentNode.parentNode.rowIndex;
-            //document.getElementById("event-table").deleteRow(i);
         } else {
             return;
             // Do nothing
-        }
-    })
+        };
+    });
+};
+
+
+$(document).ready(function () {
     //greeting();
     getAndDisplayEvents();
     getAndDisplayStagePlots();
-    //getAndDisplayManifest();
-   // deleteStagePlot();
+    deleteStagePlot();
     renderFirstQuestion();
     renderNextQuestion();
     cancelNewEvent();
