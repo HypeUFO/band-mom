@@ -286,7 +286,7 @@ router.route('/api/stage-plot')
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'});
-    }); 
+    });
 });
 
 // USERS
@@ -323,6 +323,7 @@ router.post('/api/user', (req, res) => {
 
 router.get('/dashboard', (req, res) => {
   if (!req.isAuthenticated()) {
+    res.redirect('/login');
     return res.status(401).json({ message: 'Not logged in' });
   }
   console.log(req.user.apiRepr());
