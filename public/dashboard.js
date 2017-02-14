@@ -1,3 +1,5 @@
+// Client Side State
+
 const NEW_EVENT = {};
 
 const QUESTIONS = {
@@ -41,6 +43,8 @@ const QUESTIONS = {
     }]
 };
 
+
+
 function renderOptionsHTML(question) {
     var questionHtml = `<h3>${question.question}</h3>`;
     for (index in question.options) {
@@ -57,27 +61,7 @@ function renderOptionsHTML(question) {
 
 
 //
-function handleQty() {
-    $(".up-down-btn").on("click", function () {
 
-        var $button = $(this);
-        var oldValue = $button.parent().find(".qty-input").val();
-
-        if ($button.text() == "+") {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-
-        $button.parent().find(".qty-input").val(newVal);
-
-    });
-};
 
 function renderQuestionHTML(question) {
     var questionHtml = `<h3>${question.question}</h3>`;
@@ -154,24 +138,7 @@ function getNewEventData() {
 
 //
 
-function cancelNewEvent() {
-    $('.btn-guide-cancel').on('click', function () {
-        QUESTIONS.currentQuestion = 0;
-        $('#eventGuideModal').modal('hide');
-    });
-}
 
-function renderNewEvent() {
-    $('.btn-save-event').on('click', function () {
-        console.log(NEW_EVENT);
-        saveNewEvent();
-        QUESTIONS.currentQuestion = 0;
-        $('.btn-guide-next').removeClass('hide');
-        $('.btn-save-event').addClass('hide');
-        $('#eventGuideModal').modal('hide');
-        //NEW_EVENT = {};
-    });
-}
 
 function saveNewEvent() {
     NEW_EVENT.dateCreated = new Date;
@@ -183,44 +150,7 @@ function saveNewEvent() {
         url: '/api/event',
         data: NEW_EVENT,
         success: function (data) {
-            $('#event-table').append(
-                `<tr id="${data.id}">
-                <td>
-                    <a href="#" class="eventDate" data-type="text" data-pk="1">${data.eventDate}</a>
-                </td>
-                <td>
-                    <a href="#" class="venueName" data-type="text" data-pk="1">${data.venueName}</a>
-                </td>
-                <td>
-                    <a href="#" class="venueAddress" data-type="text" data-pk="1">${data.venueAddress}</a>
-                </td>
-                <td>
-                    <a href="#" class="startTime" data-type="text" data-pk="1">${data.startTime}</a>
-                </td>
-                <td>
-                    <a href="#" class="soundcheckTime" data-type="text" data-pk="1">${data.soundCheckTime}</a>
-                </td>
-                <td><button class="btn" onclick="deleteEventRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
-            </tr>`);
-            $('#manifest-table').append(
-            `<tr id="${data.id}">
-                <td>
-                    <a href="#" class="event" data-type="text" data-pk="1">${data.eventDate} @ ${data.manifest.venueName}</a>
-                </td>
-                <td>
-                    <a href="#" class="quarterInchCables" data-type="text" data-pk="1">${data.manifest.quarterInchCables}</a>
-                </td>
-                <td>
-                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.manifest.xlrCables}</a>
-                </td>
-                <td>
-                    <a href="#" class="xlrCables" data-type="text" data-pk="1">${data.manifest.strings}</a>
-                </td>
-                <td>
-                    <a href="#" class="dIs" data-type="text" data-pk="1">${data.manifest.dIs}</a>
-                </td>
-                <td><button class="btn" onclick="deleteManifestRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
-            </tr>`);
+            displayEvents(data);
         },
         error: function () {
                 alert('An error occured while processing your request');
@@ -291,6 +221,7 @@ function bind_editable_to_column(table_selector,column_selector,title,options) {
 }
 
 // DATE
+/*
 function initDatePicker() {
 var date_input=$('.date');
       var container=$('#events').length>0 ? $('#events').parent() : "body";
@@ -305,13 +236,9 @@ var date_input=$('.date');
       //date_input.datepicker();
 };
 // GET USER EVENTS ON LOGIN
+*/
 
-// this function's name and argument can stay the
-// same after we have a live API, but its internal
-// implementation will change. Instead of using a
-// timeout function that returns mock data, it will
-// use jQuery's AJAX functionality to make a call
-// to the server and then run the callbackFn
+
 
 function getEvents(callbackFn) {
     $.ajax({
@@ -322,78 +249,80 @@ function getEvents(callbackFn) {
         },
         success: function (data) {
             console.log(data);
-            callbackFn(data);
+            var data = data.events;
+            for (index in data)
+            callbackFn(data[index]);
         },
         //error:
     });
-    //console.log(data);
-    //callbackFn(data)
-
 };
-
-
-
-// this function stays the same when we connect
-// to real API later
-function displayEvents(data) {
-    for (index in data.events) {
-        $('#event-table').append(
-            `<tr id="${data.events[index].id}">
+function displayEventItem(data) {
+    $('#event-table-body').append(
+            `<tr id="${data.id}">
                 <td>
-                    <a href="#" class="eventDate date" data-type="date" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].eventDate}</a>
+                    <a href="#" class="eventDate date" data-type="date" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.eventDate}</a>
                 </td>
                 <td>
-                    <a href="#" class="venueName" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].venueName}</a>
+                    <a href="#" class="venueName" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.venueName}</a>
                 </td>
                 <td>
-                    <a href="#" class="venueAddress" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].venueAddress}</a>
+                    <a href="#" class="venueAddress" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.venueAddress}</a>
                 </td>
                 <td>
-                    <a href="#" class="startTime" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].startTime}</a>
+                    <a href="#" class="startTime" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.startTime}</a>
                 </td>
                 <td>
-                    <a href="#" class="soundCheckTime" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="${data.events[index].id}">${data.events[index].soundCheckTime}</a>
+                    <a href="#" class="soundCheckTime" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.soundCheckTime}</a>
                 </td>
                 <td><button class="btn" onclick="deleteEventRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
             </tr>`);
-            //return data;
+}
 
-    }
-    for (index in data.events) {
-        $('#manifest-table').append(
-            `<tr id="${data.events[index].id}">
+function displayManifestItem(data) {
+    $('#manifest-table-body').append(
+            `<tr id="${data.id}">
                 <td>
-                    <a href="#" class="event" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].eventDate} @ ${data.events[index].venueName}</a>
+                    <a href="#" class="event" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.eventDate} @ ${data.venueName}</a>
                 </td>
                 <td>
-                    <a href="#" class="quarterInchCables" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].manifest.quarterInchCables}</a>
+                    <a href="#" class="quarterInchCables" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.manifest.quarterInchCables}</a>
                 </td>
                 <td>
-                    <a href="#" class="xlrCables" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].manifest.xlrCables}</a>
+                    <a href="#" class="xlrCables" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.manifest.xlrCables}</a>
                 </td>
                 <td>
-                    <a href="#" class="xlrCables" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].manifest.strings}</a>
+                    <a href="#" class="xlrCables" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.manifest.strings}</a>
                 </td>
                 <td>
-                    <a href="#" class="dIs" data-type="text" data-url="/api/event/${data.events[index].id}" data-pk="1">${data.events[index].manifest.dIs}</a>
+                    <a href="#" class="dIs" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.manifest.dIs}</a>
                 </td>
                 <td><button class="btn" onclick="deleteManifestRow(this)"><span class="glyphicon glyphicon-remove-circle"></span></button></td>
             </tr>`);
-    };
+}
+
+function displayEvents(data) {
+    displayEventItem(data);
+    displayManifestItem(data);
+    $('#event-table').footable();
+    $('#manifest-table').footable();
+};
+
+function bindEditableToEventTable() {
     bind_editable_to_column('#event-table', 'tr td a.eventDate', 'eventDate');
     bind_editable_to_column('#event-table', 'tr td a.venueName', 'venueName');
     bind_editable_to_column('#event-table', 'tr td a.venueAddress', 'venueAddress');
     bind_editable_to_column('#event-table', 'tr td a.startTime', 'startTime');
     bind_editable_to_column('#event-table', 'tr td a.soundCheckTime', 'soundCheckTime');
+};
 
+
+function bindEditableToManifestTable() {
     bind_editable_to_column('#manifest-table', 'tr td a.event', 'event');
     bind_editable_to_column('#manifest-table', 'tr td a.quarterInchCables', 'quarterInchCables');
     bind_editable_to_column('#manifest-table', 'tr td a.xlrCables', 'xlrCables');
     bind_editable_to_column('#manifest-table', 'tr td a.dIs', 'dIs');
-
-    $('#event-table').footable();
-    $('#manifest-table').footable();
 };
+
 
 
 
@@ -402,9 +331,7 @@ function getAndDisplayEvents() {
 
 };
 
-$('.btn-done-plot').on('click', function () {
-    $('#upload-plot-modal').modal('hide');
-});
+
 
 
 
@@ -438,7 +365,7 @@ function displayStagePlots(data) {
 function getAndDisplayStagePlots() {
     getStagePlots(displayStagePlots);
 
-}
+};
 
 Dropzone.options.uploadPlot = {
     paramName: 'stageplot',
@@ -477,24 +404,11 @@ Dropzone.options.uploadPlot = {
     }
 };
 
-$('.btn-done-plot').on('click', function(){
-    getAndDisplayStagePlots();
-})
 
-
-
-const handleLogout = function () {
-    $('.btn-logout').click(function () {
-        $.ajax({
-            type: 'GET',
-            url: '/api/logout'
-        });
-    })
-};
 
 const greeting = function () {
     $('#dashboard-greeting').append(`Hello ${this.userName}`);
-}
+};
 
 //turn to inline mode
 //$.fn.editable.defaults.mode = 'inline';
@@ -529,7 +443,72 @@ $('#stage-plot').on('click', '.del-plot', function () {
 };
 
 
+// EVENT LISTENERS
+
+$('.btn-done-plot').on('click', function(){
+    getAndDisplayStagePlots();
+})
+
+
+
+const handleLogout = function () {
+    $('.btn-logout').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/api/logout'
+        });
+    })
+};
+
+$('.btn-done-plot').on('click', function () {
+    $('#upload-plot-modal').modal('hide');
+});
+
+
+function cancelNewEvent() {
+    $('.btn-guide-cancel').on('click', function () {
+        QUESTIONS.currentQuestion = 0;
+        $('#eventGuideModal').modal('hide');
+    });
+}
+
+function renderNewEvent() {
+    $('.btn-save-event').on('click', function () {
+        console.log(NEW_EVENT);
+        saveNewEvent();
+        QUESTIONS.currentQuestion = 0;
+        $('.btn-guide-next').removeClass('hide');
+        $('.btn-save-event').addClass('hide');
+        $('#eventGuideModal').modal('hide');
+        //NEW_EVENT = {};
+    });
+}
+
+function handleQty() {
+    $(".up-down-btn").on("click", function () {
+
+        var $button = $(this);
+        var oldValue = $button.parent().find(".qty-input").val();
+
+        if ($button.text() == "+") {
+            var newVal = parseFloat(oldValue) + 1;
+        } else {
+            // Don't allow decrementing below zero
+            if (oldValue > 0) {
+                var newVal = parseFloat(oldValue) - 1;
+            } else {
+                newVal = 0;
+            }
+        }
+
+        $button.parent().find(".qty-input").val(newVal);
+
+    });
+};
+
 $(document).ready(function () {
+    bindEditableToEventTable();
+    bindEditableToManifestTable();
     //greeting();
     getAndDisplayEvents();
     getAndDisplayStagePlots();
