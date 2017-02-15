@@ -153,9 +153,9 @@ function saveNewEvent() {
             displayEvents(data);
         },
         error: function () {
-                alert('An error occured while processing your request');
-            },
-            dataType: 'json'
+            alert('An error occured while processing your request');
+        },
+        dataType: 'json'
     });
 }
 
@@ -201,23 +201,61 @@ function deleteManifestRow(r) {
 }
 
 
-function bind_editable_to_column(table_selector,column_selector,title,options) {
-  options = typeof options !== 'undefined' ? options : ''; //assigning source to empty when not specified. source is only used for select.
-  $(table_selector).editable({
-      params: function(params) {  //params already contain `name`, `value` and `pk`
-    var data = {};
-    data['id'] = params.pk;
-    data[title] = params.value;
-    console.log(data);
-    return data;
-  },
-    selector: column_selector,
-    ajaxOptions: {
-      type: 'PUT',
-      dataType: 'json'
-    },
-    //source: options
-  });
+function bind_editable_to_column(table_selector, column_selector, title, options) {
+    options = typeof options !== 'undefined' ? options : ''; //assigning source to empty when not specified. source is only used for select.
+    $(table_selector).editable({
+        params: function (params) { //params already contain `name`, `value` and `pk`
+            var data = {};
+            data['id'] = params.pk;
+            data[title] = params.value;
+            console.log(data);
+            return data;
+        },
+        selector: column_selector,
+        ajaxOptions: {
+            type: 'PUT',
+            dataType: 'json'
+        },
+        //source: options
+    });
+}
+
+
+
+function bind_editable_to_event_column(table_selector, column_selector, title, options) {
+    options = typeof options !== 'undefined' ? options : ''; //assigning source to empty when not specified. source is only used for select.
+    $(table_selector).editable({
+        params: function (params) { //params already contain `name`, `value` and `pk`
+            var data = {};
+            data['id'] = params.pk;
+            data[title] = params.value;
+            console.log(data);
+            return data;
+        },
+        type: 'date',
+        format: 'mm-dd-yy',
+        viewformat: 'mm-dd-yy',
+        //inputclass: "datepick",
+        placement: function (context, source) {
+            var popupWidth = 336;
+            if (($(window).scrollLeft() + popupWidth) > $(source).offset().left) {
+                return "right";
+            } else {
+                return "left";
+            }
+        },
+        emptytext: '...',
+        datetimepicker: {
+            autoclose: true,
+            weekStart: 1
+        },
+        selector: column_selector,
+        ajaxOptions: {
+            type: 'PUT',
+            dataType: 'json'
+        },
+        //source: options
+    });
 }
 
 // DATE
@@ -227,16 +265,18 @@ var date_input=$('.date');
       var container=$('#events').length>0 ? $('#events').parent() : "body";
       var options={
         format: 'mm/dd/yy',
+        viewformat: 'mm/dd/yy',
         container: container,
         todayHighlight: true,
         autoclose: true,
-        orientation: 'bottom'
+        //orientation: 'top'
       };
       date_input.datepicker(options);
       //date_input.datepicker();
 };
-// GET USER EVENTS ON LOGIN
 */
+// GET USER EVENTS ON LOGIN
+
 
 
 
@@ -251,16 +291,19 @@ function getEvents(callbackFn) {
             console.log(data);
             var data = data.events;
             for (index in data)
-            callbackFn(data[index]);
+                callbackFn(data[index]);
         },
         //error:
     });
 };
+
+//<a href="#" class="eventDate date" data-type="date" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.eventDate}</a>
+//<input type="text" id="${data.id}" class="form-control eventDate" placeholder="${data.eventDate}">
 function displayEventItem(data) {
     $('#event-table-body').append(
-            `<tr id="${data.id}">
+        `<tr id="${data.id}">
                 <td>
-                    <a href="#" class="eventDate date" data-type="date" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.eventDate}</a>
+                    <a href="#" class="eventDate" data-type="date" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.eventDate}</a>
                 </td>
                 <td>
                     <a href="#" class="venueName" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.venueName}</a>
@@ -280,7 +323,7 @@ function displayEventItem(data) {
 
 function displayManifestItem(data) {
     $('#manifest-table-body').append(
-            `<tr id="${data.id}">
+        `<tr id="${data.id}">
                 <td>
                     <a href="#" class="event" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.eventDate} @ ${data.venueName}</a>
                 </td>
@@ -291,7 +334,7 @@ function displayManifestItem(data) {
                     <a href="#" class="xlrCables" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.manifest.xlrCables}</a>
                 </td>
                 <td>
-                    <a href="#" class="xlrCables" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.manifest.strings}</a>
+                    <a href="#" class="strings" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.manifest.strings}</a>
                 </td>
                 <td>
                     <a href="#" class="dIs" data-type="text" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.manifest.dIs}</a>
@@ -308,7 +351,8 @@ function displayEvents(data) {
 };
 
 function bindEditableToEventTable() {
-    bind_editable_to_column('#event-table', 'tr td a.eventDate', 'eventDate');
+    //bind_editable_to_column('#event-table', 'tr td a.eventDate', 'eventDate');
+    bind_editable_to_event_column('#event-table', 'tr td a.eventDate', 'eventDate');
     bind_editable_to_column('#event-table', 'tr td a.venueName', 'venueName');
     bind_editable_to_column('#event-table', 'tr td a.venueAddress', 'venueAddress');
     bind_editable_to_column('#event-table', 'tr td a.startTime', 'startTime');
@@ -318,9 +362,10 @@ function bindEditableToEventTable() {
 
 function bindEditableToManifestTable() {
     bind_editable_to_column('#manifest-table', 'tr td a.event', 'event');
-    bind_editable_to_column('#manifest-table', 'tr td a.quarterInchCables', 'quarterInchCables');
-    bind_editable_to_column('#manifest-table', 'tr td a.xlrCables', 'xlrCables');
-    bind_editable_to_column('#manifest-table', 'tr td a.dIs', 'dIs');
+    bind_editable_to_column('#manifest-table', 'tr td a.quarterInchCables', 'manifest.quarterInchCables');
+    bind_editable_to_column('#manifest-table', 'tr td a.xlrCables', 'manifest.xlrCables');
+    bind_editable_to_column('#manifest-table', 'tr td a.strings', 'manifest.strings');
+    bind_editable_to_column('#manifest-table', 'tr td a.dIs', 'manifest.dIs');
 };
 
 
@@ -330,8 +375,6 @@ function getAndDisplayEvents() {
     getEvents(displayEvents);
 
 };
-
-
 
 
 
@@ -410,23 +453,18 @@ const greeting = function () {
     $('#dashboard-greeting').append(`Hello ${this.userName}`);
 };
 
-//turn to inline mode
-//$.fn.editable.defaults.mode = 'inline';
-/*
-function deletePlotImg() {
-    var path = '/public';
-    var img = path + $(this).siblings('img').prop('src');
-    img.Delete();
-}
-*/
+
+
 function deleteStagePlot() {
-$('#stage-plot').on('click', '.del-plot', function () {
+    $('#stage-plot').on('click', '.del-plot', function () {
         console.log($(this).siblings('img').prop('id'));
         if (confirm('Are you sure?')) {
             $.ajax({
                 type: "DELETE",
                 url: '/api/stage-plot/' + $(this).siblings('img').prop('id'),
-                data: {img: $(this).siblings('img').prop('name')},
+                data: {
+                    img: $(this).siblings('img').prop('name')
+                },
                 success: function () {
                     //deletePlotImg();
                     getAndDisplayStagePlots();
@@ -445,7 +483,7 @@ $('#stage-plot').on('click', '.del-plot', function () {
 
 // EVENT LISTENERS
 
-$('.btn-done-plot').on('click', function(){
+$('.btn-done-plot').on('click', function () {
     getAndDisplayStagePlots();
 })
 
@@ -507,10 +545,16 @@ function handleQty() {
 };
 
 $(document).ready(function () {
+
+    
+
+
     bindEditableToEventTable();
     bindEditableToManifestTable();
     //greeting();
     getAndDisplayEvents();
+
+    //initDatePicker();
     getAndDisplayStagePlots();
     deleteStagePlot();
     renderFirstQuestion();

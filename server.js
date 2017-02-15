@@ -177,7 +177,7 @@ router.put('/api/event/:id', (req, res) => {
   console.log(req.params);
   console.log(req.body);
   const toUpdate = {dateModified: new Date};
-  const updateableFields = ['eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes', 'dateModified'];
+  const updateableFields = ['eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest.quarterInchCables', 'manifest.xlrCables', 'manifest.dIs', 'manifest.strings', 'notes', 'dateModified'];
 
   updateableFields.forEach(field => {
     if (field in req.body) {
@@ -347,7 +347,7 @@ router.get('/dashboard', (req, res) => {
 })
 
 router.post('/api/login',
-  passport.authenticate('local', {session: true, successRedirect: '/dashboard', failureRedirect: '/login'}),
+  passport.authenticate('local', {session: true, successRedirect: '/dashboard', failureRedirect: '/login', failureFlash: 'Incorrect username or password'}),
   (req, res) => {
 
   });
