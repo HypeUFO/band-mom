@@ -391,6 +391,16 @@ label {
   #loginModalBtn {
     display: block;
   }
+
+#bmLogo {
+    display: none;
+}
+
+
+#websiteTitle {
+    font-size: 8em;
+    padding-top: 10px;
+}
   /*
   .venueAddress {
       display: none;
@@ -420,4 +430,20 @@ label {
     margin: 0px;
     font-size: small;
 }
-.editable-popup{ height: 20px;}
+.editable-popup{ height: auto;}
+/*
+#upload-plot-container {
+    position: absolute;
+    bottom: 0;
+}
+
+#stage-plot-img-container {
+    position: relative;
+}
+*/
+
+table#stage-plot-table,
+table#stage-plot-table td
+{
+    border: none !important;
+}
