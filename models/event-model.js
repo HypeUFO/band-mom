@@ -1,5 +1,6 @@
 //const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+var date = require('date-and-time');
 
 mongoose.Promise = global.Promise;
 
@@ -40,7 +41,8 @@ const EventSchema = mongoose.Schema({
 
 EventSchema.methods.apiRepr = function () {
     return {
-        eventDate: this.eventDate.toLocaleDateString('en-US') || '',
+        //eventDate: this.eventDate.toLocaleDateString('en-US') || '',
+        eventDate: date.format(this.eventDate, 'M/D/YY'),
         venueName: this.venueName || '',
         venueAddress: this.venueAddress || '',
         startTime: this.startTime || '',
