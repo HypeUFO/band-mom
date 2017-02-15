@@ -148,7 +148,49 @@ input[type="text"] {
     font-size: 2.5em;
 }
 */
+input {
+    margin: 1px;
+    border: 1px solid gray;
+    width: 85%;
+    height: 30px;
+}
+/*
+input[type="text"], input[type="password"] {
+    padding-left: 6px;
+    margin: 0, auto;
+    color: gray;
+    width: 50%;
+}
+*/
+.btn-primary {
+    background: #2E2D88
+}
+/*
+.btn-login {
+    margin-top: 15px;
+    margin-left: 64%;
+}
+*/
+/*
+.modal-header {
+    background: #2E2D88;
+}
 
+.modal-title {
+    color: white;
+}
+
+.btn-modal-close{
+    color: white;
+}
+
+.form-group {
+    padding: 20px;
+    padding-top: 40px;
+}
+*/
+
+/*
 .sign-up-button {
     margin: 10px;
     background: white;
@@ -164,11 +206,21 @@ input[type="text"] {
 .sign-up-button:active {
     transform: translateY(1px);
 }
+*/
+
+#signup-form {
+    color: #2E2D88;
+}
+
+.help-block {
+    font-size: 12px;
+}
 
 .form-group {
     margin-right: 15px;
+    margin-top: 15px;
 }
-
+/*
 .join-btn {
     background-color: #2E2D88;
     border: 1px solid white;
@@ -177,7 +229,7 @@ input[type="text"] {
 .btn-logout {
     background-color: #2E2D88;
     color: white;
-}
+}*/
 
 h5 {
     margin-top: 18px;
@@ -218,7 +270,7 @@ h5 {
 .nav-tabs {
     font-size: 18px;
 }
-
+/*
 .upload-btn {
     margin: 10px;
     background: #2E2D88;
@@ -249,7 +301,7 @@ h5 {
 .add-event-btn:active {
     transform: translateY(1px);
 }
-
+*/
 #event-guide-form {
     margin: 50px 0 0 0;
 }
@@ -258,7 +310,7 @@ label {
   font: 18px Helvetica, sans-serif;
   display: block;
   float: left;
-  text-align: right;
+  margin-left: 12px;
   padding: 5px 10px 0 0;
   width: 140px;
 }
@@ -306,13 +358,12 @@ label {
   background-position: 0 -29px;
 }*/
 
-
 .hide {
     display: none;
 }
 
 #manifest-list {
-    margin-top: 75px;
+    margin-top: 50px;
 }
 
 .manifest-item {
@@ -328,4 +379,71 @@ label {
     z-index: 1;
     opacity: 0.9;
     background: url('images/page-loader.gif') 50% 50% no-repeat rgb(249, 249, 249);
+}
+#loginModalBtn {
+    display: none;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 768px) {
+    #loginDropdown {
+    display: none;
+  }
+  #loginModalBtn {
+    display: block;
+  }
+
+#bmLogo {
+    display: none;
+}
+
+
+#websiteTitle {
+    font-size: 8em;
+    padding-top: 10px;
+}
+  /*
+  .venueAddress {
+      display: none;
+  }
+  .soundCheckTime {
+      display: none;
+  }*/
+}
+
+.btn-primary {
+    background: #2E2D88;
+    color: white;
+    font-weight: bold;
+    border: 1px solid white;
+}
+
+.btn-primary:hover {
+    box-shadow: 2px 2px 5px black;
+    background-color: #3E2D88;
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.fooicon-plus {
+    margin: 0px;
+    font-size: small;
+}
+.editable-popup{ height: auto;}
+/*
+#upload-plot-container {
+    position: absolute;
+    bottom: 0;
+}
+
+#stage-plot-img-container {
+    position: relative;
+}
+*/
+
+table#stage-plot-table,
+table#stage-plot-table td
+{
+    border: none !important;
 }
