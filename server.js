@@ -37,7 +37,7 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-//app.use(flash());
+
 
 // logging
 app.use(morgan('common'));
@@ -142,10 +142,10 @@ router.post('/api/event', (req, res) => {
       venueAddress: req.body.venueAddress,
       startTime: req.body.startTime,
       soundCheckTime: req.body.soundCheckTime,
-      manifest: {'quarterInchCables': req.body.quarterInchCables,
-      'xlrCables': req.body.xlrCables,
-      'strings': req.body.strings,
-      'dIs': req.body.dIs },
+      manifest: { quarterInchCables: req.body.quarterInchCables,
+      xlrCables: req.body.xlrCables,
+      strings: req.body.strings,
+      dIs: req.body.dIs },
       notes: req.body.notes,
       dateCreated: req.body.dateCreated,
       dateModified: req.body.dateModified,
@@ -304,6 +304,14 @@ router.route('/api/stage-plot')
   // Sign Up/Create User
 
 router.post('/api/user', (req, res) => {
+  if (req.body.password !== req.body.passwordConfirm) {
+    res.status(500).json({
+      message: 'passwords do not match'
+    })
+  }
+  console.log('//////////////////////////////');
+  console.log(req.body);
+  console.log('//////////////////////////////');
   const encryption = User.hashPassword(req.body.password);
   User
     .create({
@@ -349,6 +357,9 @@ router.get('/dashboard', (req, res) => {
 router.post('/api/login',
   passport.authenticate('local', {session: true, successRedirect: '/dashboard', failureRedirect: '/login', failureFlash: 'Incorrect username or password'}),
   (req, res) => {
+    console.log('//////////////////////////////');
+  console.log(req.body);
+  console.log('//////////////////////////////');
 
   });
 
