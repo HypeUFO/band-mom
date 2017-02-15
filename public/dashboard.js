@@ -134,12 +134,6 @@ function getNewEventData() {
 
 
 
-
-
-//
-
-
-
 function saveNewEvent() {
     NEW_EVENT.dateCreated = new Date;
     NEW_EVENT.dateModified = new Date;
@@ -210,6 +204,14 @@ function bind_editable_to_column(table_selector, column_selector, title, options
             data[title] = params.value;
             console.log(data);
             return data;
+        },
+        placement: function (context, source) {
+            var popupWidth = 336;
+            if (($(window).scrollLeft() + popupWidth) > $(source).offset().left) {
+                return "right";
+            } else {
+                return "left";
+            }
         },
         selector: column_selector,
         ajaxOptions: {
@@ -394,13 +396,13 @@ function getStagePlots(callbackFn) {
 
 
 function displayStagePlots(data) {
-    $('#stage-plot-img-container').empty();
+    $('#stage-plot-table-body').empty();
     for (const stagePlot of data.stageplots) {
-        $('#stage-plot-img-container').prepend(
-            `<div class="img-wrap">
-                        <span class="del-plot close">&times;</span>
-                        <img src="/stage-plots/${stagePlot.img}" id="${stagePlot.id}" name="${stagePlot.img}"class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
-                    </div>`
+        $('#stage-plot-table-body').prepend(
+            `<tr><td class="img-wrap">
+                <span class="del-plot close">&times;</span>
+                <img src="/stage-plots/${stagePlot.img}" id="${stagePlot.id}" name="${stagePlot.img}"class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
+            </td></tr>`
         );
     };
 };
@@ -450,7 +452,7 @@ Dropzone.options.uploadPlot = {
 
 
 const greeting = function () {
-    $('#dashboard-greeting').append(`Hello ${this.userName}`);
+    $('#dashboard-greeting').append(`Hello ${res.user.userName}`);
 };
 
 
@@ -545,10 +547,6 @@ function handleQty() {
 };
 
 $(document).ready(function () {
-
-    
-
-
     bindEditableToEventTable();
     bindEditableToManifestTable();
     //greeting();
