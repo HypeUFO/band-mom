@@ -3,6 +3,9 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
 var fs = require('fs');
+const request = require('supertest');
+var date = require('date-and-time');
+
 
 const should = chai.should();
 
@@ -15,29 +18,26 @@ const {TEST_DATABASE_URL} = require('../config');
 
 chai.use(chaiHttp);
 
-// load html
+// AUTHORIZE USER FOR TESTS
 
-describe('index page', function () {
-    it('should load', function () {
-        return chai.request(app)
-            .get('/')
-            .then(function (res) {
-                res.should.have.status(200);
-                res.should.be.html;
-            });
-    });
-});
+const agent = chai.request.agent(app)
 
-describe('dashboard page', function () {
-    it('should load', function () {
-        return chai.request(app)
-            .get('/dashboard')
-            .then(function (res) {
-                res.should.have.status(200);
-                res.should.be.html;
-            });
-    });
-});
+function Auth(test) {
+  agent
+      .post('/api/login')
+      .send({username: "testUser", password:"testPassword"})
+      .then(function (_res) {
+        //_res.should.have.cookie('sessionid');
+      return agent;
+    })
+    //.catch(err => console.log('an AUTH error occured'))
+    .then(function(agent){
+      test(agent);
+    })
+    .catch(err => console.log('error in AUTH'));
+}
+
+
 
 // API Event Endpoint Setup
 
@@ -80,7 +80,7 @@ function generateSoundcheckTime() {
 
 function generateEventData() {
     return {
-        eventDate: faker.date.future(),
+        eventDate: date.format(faker.date.future(), 'M/D/YY'),
         venueName: generateVenueName(),
         venueAddress: faker.address.streetAddress(),
         startTime: generateStartTime(),
@@ -97,97 +97,153 @@ function tearDownDb() {
     console.warn('Deleting database');
     return mongoose.connection.dropDatabase();
 };
-
-
-
-
-// API Event Endpoint Tests
-
-describe('Events API Endpoint', function() {
-
-  before(function() {
-    const TEST_USER = {"userName": "testUser",
+const TEST_USER = {"userName": "testUser",
       "email": "testuser@test.com",
       "password": "testPassword",
       "passwordConfirm": "testPassword"}
+
+
+describe(' TEST BandMom App', function(){
+
+// API Event Endpoint Tests
+
+
+
+  before(function() {
     return runServer(TEST_DATABASE_URL)
+    .then(function(){
+      return seedEventData();
+    })
     .then(function(){
       return chai.request(app)
       .post('/api/user')
-      .send(TEST_USER);
+      .send(TEST_USER)
+    })
+    .catch(err => console.log('error in beforeEach'))
     });
 
-  });
 
-  beforeEach(function() {
+  // beforeEach(function() {
 
-      return seedEventData();
-  });
+  //       return seedEventData();
+  // });
 
-  afterEach(function() {
-    return tearDownDb();
-  });
+  // afterEach(function() {
+    
+  // });
 
   after(function() {
-    return closeServer();
+    return tearDownDb()
+    .then(function(){
+      return closeServer();
+    })
+    .catch(err => console.log('error in after'))
   });
 
+
+// load html
+
+describe('index page', function () {
+    it('should load', function () {
+        return chai.request(app)
+            .get('/')
+            .then(function (res) {
+                res.should.have.status(200);
+                res.should.be.html;
+            });
+    });
+});
+
+
+  describe('dashboard page', function () {
+      it('should load', function () {
+        let res;
+        const dashboardTest = function(agent) {
+          agent.get('/dashboard')
+              .then(function (res) {
+                  res.should.have.status(200);
+                  res.should.be.html;
+              })
+              .catch(err => console.log('error on dashboard page'))
+        }
+        Auth(dashboardTest)
+        })
+      });
+
+
 ////////////////////////////////////////////////////////////
+describe(' TEST Events API Endpoint', function() {
 
-describe.only('GET endpoint', function() {
 
-    it('should return all existing events', function() {
-      let res;
-      var agent = chai.request.agent(app)
-      .post('/api/login')
-      .send({username: "testUser", password:"testPassword"})
-      .then(function (_res) {
-        expect(_res).to.have.cookie('sessionid');
-      return agent
+
+describe('GET endpoint', function () {
+
+  it('should return all existing events', function () {
+    let res;
+    const eventTest1 = function (agent) {
+      agent
         .get('/api/event')
-        .then(function(_res) {
+        .then(function (_res) {
           res = _res;
           res.should.have.status(200);
           res.body.events.should.have.length.of.at.least(1);
           return Event.count();
         })
-        .then(function(count) {
+        .catch(err => console.log('error get /api/event', err))
+        .then(function (count) {
+          console.log('Event GET 1 res', res.body.events);
           res.body.events.should.have.length.of(count);
-        });
-    });
-    });
-
-
-    // it('should return events with right fields', function() {
-
-    //   let resEvent;
-    //   return chai.request(app)
-    //     .get('/api/event')
-    //     .then(function(res) {
-    //       res.should.have.status(200);
-    //       res.should.be.json;
-    //       res.body.events.should.be.a('array');
-    //       res.body.events.should.have.length.of.at.least(1);
-
-    //       res.body.events.forEach(function(event) {
-    //         event.should.be.a('object');
-    //         event.should.include.keys(
-    //           'eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes');
-    //       });
-    //       resEvent = res.body.events[0];
-    //       return Event.findById(resEvent.id);
-    //     })
-    //     .then(function(event) {
-    //       resEvent.eventDate.should.equal(event.eventDate.toISOString());
-    //       resEvent.venueName.should.equal(event.venueName);
-    //       resEvent.venueAddress.should.equal(event.venueAddress);
-    //       resEvent.startTime.should.equal(event.startTime);
-    //       resEvent.soundCheckTime.should.equal(event.soundCheckTime);
-    //       resEvent.manifest.should.deep.equal(event.manifest);
-    //       resEvent.notes.should.equal(event.notes);
-    //     });
-    // });
+        })
+        .catch(err => console.log('error on test 1'));
+    }
+    Auth(eventTest1);
   });
+
+
+
+  it('should return events with right fields', function () {
+    let resEvent;
+    const eventGetTest2 = function (agent) {
+      agent
+        .get('/api/event')
+        .then(function (res) {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.events.should.be.a('array');
+          res.body.events.should.have.length.of.at.least(1);
+
+          res.body.events.forEach(function (event) {
+            event.should.be.a('object');
+            event.should.include.keys(
+              'eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes');
+          });
+          resEvent = res.body.events[0];
+          return Event.findById(resEvent.id);
+        })
+        .then(function (event) {
+          console.log('Event GET 2 res', resEvent);
+          resEvent.eventDate.should.equal(event.eventDate.toISOString());
+          resEvent.venueName.should.equal(event.venueName);
+          resEvent.venueAddress.should.equal(event.venueAddress);
+          resEvent.startTime.should.equal(event.startTime);
+          resEvent.soundCheckTime.should.equal(event.soundCheckTime);
+          resEvent.manifest.should.deep.equal(event.manifest);
+          resEvent.notes.should.equal(event.notes);
+        })
+        .catch(err => console.log('error on test 2'));
+    }
+    Auth(eventGetTest2);
+  });
+
+  // //return chai.request(app)
+  // var agent = chai.request.agent(app)
+  // .post('/api/login')
+  // // .send({username: "testUser", password:"testPassword"})
+  // .then(function (_res) {
+  //  // _res.should.have.cookie('sessionid');
+  // return agent
+
+});
 
 ////////////////////////////////////////////////////////////
 
@@ -196,8 +252,9 @@ describe.only('GET endpoint', function() {
 
       const newEvent = generateEventData();
 
-      return chai.request(app)
-        .post('/api/event')
+     const eventTestPost = function(agent) {
+       agent
+       .post('/api/event')
         .send(newEvent)
         .then(function(res) {
           res.should.have.status(201);
@@ -205,7 +262,7 @@ describe.only('GET endpoint', function() {
           res.body.should.be.a('object');
           res.body.should.include.keys(
               'eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest', 'notes');
-          res.body.eventDate.should.equal(newEvent.eventDate.toISOString());
+          res.body.eventDate.should.equal(newEvent.eventDate);
           res.body.venueName.should.equal(newEvent.venueName);
           res.body.venueAddress.should.equal(newEvent.venueAddress);
           res.body.startTime.should.equal(newEvent.startTime);
@@ -215,6 +272,7 @@ describe.only('GET endpoint', function() {
           return Event.findById(res.body.id);
         })
         .then(function(event) {
+          console.log('POST res', event)
           event.venueName.should.equal(newEvent.venueName);
           event.venueAddress.should.equal(newEvent.venueAddress);
           event.startTime.should.equal(newEvent.startTime);
@@ -224,8 +282,11 @@ describe.only('GET endpoint', function() {
           event.dateCreated.toString().should.equal(newEvent.dateCreated.toString());
           event.dateModified.toString().should.equal(newEvent.dateModified.toString());
           event.userId.should.equal(newEvent.userId);
-        });
-    });
+        })
+        .catch(err => console.log(err));
+    }
+    Auth(eventTestPost);
+  });
   });
 
 ////////////////////////////////////////////////////////////
@@ -237,8 +298,8 @@ describe.only('GET endpoint', function() {
         startTime: '10:00pm',
         soundCheckTime: '8:00pm'
       };
-
-      return Event
+      const eventTestPut = function(agent) {
+        agentEvent
         .findOne()
         .exec()
         .then(function(event) {
@@ -253,18 +314,31 @@ describe.only('GET endpoint', function() {
           return Event.findById(updateData.id).exec();
         })
         .then(function(event) {
+          console.log('PUT res' ,event);
           event.startTime.should.equal(updateData.startTime);
           event.soundCheckTime.should.equal(updateData.soundCheckTime);
-        });
+        })
+        .catch(err => console.log(err));
+      };
+      Auth(eventTestPut);
       });
   });
+
 
 ////////////////////////////////////////////////////////////
 
   describe('DELETE endpoint', function(){
       it('should delete an event by id', function(){
           let event;
-          return Event
+      //     var agent = chai.request.agent(app)
+      // .post('/api/login')
+      // // .send({username: "testUser", password:"testPassword"})
+      // .then(function (_res) {
+      //   //_res.should.have.cookie('sessionid');
+      // return agent
+      const eventTestDelete = function(agent) {
+        agent
+        Event
           .findOne()
           .exec()
           .then(function(_event) {
@@ -278,10 +352,15 @@ describe.only('GET endpoint', function() {
           .then(function(_event) {
               should.not.exist(_event);
           })
-      })
-  })
+          .catch(err => console.log(err));
+      }
+      Auth(eventTestDelete);
 
+    })
+  });
 });
+
+
 
 ////////////////////////////////////////////////////////////
 
@@ -407,3 +486,4 @@ describe('StagePlot API Endpoint', function() {
 
 });
 */
+});

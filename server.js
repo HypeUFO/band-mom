@@ -176,7 +176,7 @@ router.put('/api/event/:id', (req, res) => {
   }
   console.log(req.params);
   console.log(req.body);
-  const toUpdate = {dateModified: new Date};
+  const toUpdate = {dateModified: new Date().toISOString()};
   const updateableFields = ['eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest.quarterInchCables', 'manifest.xlrCables', 'manifest.dIs', 'manifest.strings', 'notes', 'dateModified'];
 
   updateableFields.forEach(field => {
@@ -309,9 +309,9 @@ router.post('/api/user', (req, res) => {
       message: 'passwords do not match'
     })
   }
-  console.log('//////////////////////////////');
-  console.log(req.body);
-  console.log('//////////////////////////////');
+  // console.log('//////////////////////////////');
+  // console.log(req.body);
+  // console.log('//////////////////////////////');
   const encryption = User.hashPassword(req.body.password);
   User
     .create({
