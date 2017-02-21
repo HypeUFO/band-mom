@@ -14,9 +14,9 @@
   "author": "Michael Maio",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/HypeUFO/capstone-2/issues"
+    "url": "https://github.com/HypeUFO/band-mom/issues"
   },
-  "homepage": "https://github.com/HypeUFO/capstone-2#readme",
+  "homepage": "https://github.com/HypeUFO/band-mom#readme",
   "dependencies": {
     "bcrypt-nodejs-as-promised": "^1.0.4",
     "bcryptjs": "^2.4.0",
@@ -38,7 +38,6 @@
     "chai-http": "^3.0.0",
     "faker": "^3.1.0",
     "mocha": "^3.2.0",
-    "supertest": "^3.0.0",
     "supertest-as-promised": "^4.0.2"
   }
 }
