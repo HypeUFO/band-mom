@@ -3,7 +3,7 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
 var fs = require('fs');
-const request = require('supertest-as-promised');
+const request = require('supertest');
 var date = require('date-and-time');
 
 
