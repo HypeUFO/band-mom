@@ -24,10 +24,8 @@ app.use(express.static('public'));
 
 app.use(bodyParser.json());
 
-//app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan('dev'));
-//app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session({secret: 'anystringoftext',
 				 saveUninitialized: true,
@@ -78,19 +76,11 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-
-
 // serve html
 
 router.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
-/*
-router.get('/dashboard', (req, res) => {
-  res.sendFile(__dirname + '/public/dashboard.html');
-});
-*/
-
 
 // GET Event
 
@@ -134,7 +124,6 @@ router.post('/api/event', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: 'Not logged in' });
   }
-  console.log(req.body);
     Event
     .create({
       eventDate: req.body.eventDate,
@@ -174,8 +163,6 @@ router.put('/api/event/:id', (req, res) => {
     console.error(message);
     res.status(400).json({message: message});
   }
-  console.log(req.params);
-  console.log(req.body);
   const toUpdate = {dateModified: new Date().toISOString()};
   const updateableFields = ['eventDate', 'venueName', 'venueAddress', 'startTime', 'soundCheckTime', 'manifest.quarterInchCables', 'manifest.xlrCables', 'manifest.dIs', 'manifest.strings', 'notes', 'dateModified'];
 
@@ -255,7 +242,6 @@ router.delete('/api/stage-plot/:id', (req, res) => {
     .then(stageplot => {
       fs.unlink('./public/stage-plots/' + req.body.img, (err) => {
         if (err) throw err;
-        console.log('successfully deleted public/stage-plots' + req.body.img);
       });
       res.status(204).end()
     })
@@ -269,7 +255,6 @@ router.delete('/api/stage-plot/:id', (req, res) => {
 var storage = multer.diskStorage({
   destination: 'public/stage-plots',
   filename: function (req, file, cb) {
-    console.log(file);
     cb(null, Date.now() + '-' + file.originalname );
   }
 });
@@ -309,9 +294,6 @@ router.post('/api/user', (req, res) => {
       message: 'passwords do not match'
     })
   }
-  // console.log('//////////////////////////////');
-  // console.log(req.body);
-  // console.log('//////////////////////////////');
   const encryption = User.hashPassword(req.body.password);
   User
     .create({
@@ -344,12 +326,7 @@ router.get('/dashboard', (req, res) => {
     res.redirect('/login');
     return res.status(401).json({ message: 'Not logged in' });
   }
-  if (req.body.userName === 'demo' && req.isAuthenticated()) {
-    //seedDemoInfo();
-  }
-  console.log(req.user.apiRepr());
-  //res.sendStatus(200).json({ user: req.user.apiRepr() });
-  res.sendFile(__dirname + '/public/dashboard.html', {
+  res.status(200).sendFile(__dirname + '/public/dashboard.html', {
     user: req.user.apiRepr()
   });
 })
@@ -357,10 +334,9 @@ router.get('/dashboard', (req, res) => {
 router.post('/api/login',
   passport.authenticate('local', {session: true, successRedirect: '/dashboard', failureRedirect: '/login', failureFlash: 'Incorrect username or password'}),
   (req, res) => {
-    console.log('//////////////////////////////');
-  console.log(req.body);
-  console.log('//////////////////////////////');
-
+    // if (req.body.userName === 'demo' && req.isAuthenticated()) {
+  //   //seedDemoInfo();
+  // }
   });
 
 

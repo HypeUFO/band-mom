@@ -4,7 +4,6 @@ const NEW_EVENT = {};
 
 const QUESTIONS = {
     currentQuestion: 0,
-    //manifest: [],
     questions: [{
         question: "What is the date of the event?",
         mapToField: "eventDate"
@@ -43,25 +42,19 @@ const QUESTIONS = {
     }]
 };
 
-
-
 function renderOptionsHTML(question) {
     var questionHtml = `<h3>${question.question}</h3>`;
     for (index in question.options) {
         var prompt = `<div class="form-group">
         <label for="${question.options[index].name}">${question.options[index].name}</label>
         <div class="dec btn btn-primary up-down-btn">-</div>
-        <input type="text" class="form-control user-event-input options-input qty-input" id="${question.options[index].name}" value="0">
+        <input type="text" class="form-control user-event-input qty-input" id="${question.options[index].name}" value="0">
     <div class="inc btn btn-primary up-down-btn">+</div></div>`;
         questionHtml += prompt;
     };
     $('#event-guide-form').html(questionHtml);
     handleQty();
 };
-
-
-//
-
 
 function renderQuestionHTML(question) {
     var questionHtml = `<h3>${question.question}</h3>`;
@@ -114,31 +107,21 @@ function getNewEventData() {
     const input = $(".user-event-input");
     const currentQuestion = QUESTIONS.questions[QUESTIONS.currentQuestion]
     const key = currentQuestion.mapToField;
-    //console.log(input);
     if (currentQuestion.isMultiLine) {
-        //NEW_EVENT[key] = {}
         for (let i = 0; i < input.length; i++) {
             let singleVal = input[i].value;
-            //if (i < input.length) {
-            //    NEW_EVENT[key][currentQuestion.options[i].name] = singleVal;
-            // } else {
             NEW_EVENT[currentQuestion.options[i].name] = singleVal;
-            //}
         }
     } else {
         let singleVal = input[0].value;
         NEW_EVENT[key] = singleVal;
     }
-    console.log(NEW_EVENT);
 };
-
 
 
 function saveNewEvent() {
     NEW_EVENT.dateCreated = new Date;
     NEW_EVENT.dateModified = new Date;
-    console.log(NEW_EVENT);
-
     $.ajax({
         type: "POST",
         url: '/api/event',
@@ -153,8 +136,6 @@ function saveNewEvent() {
     });
 }
 
-
-
 function deleteEventRow(r) {
     var i = r.parentNode.parentNode;
     if (confirm('Are you sure you want to delete this event?')) {
@@ -164,9 +145,9 @@ function deleteEventRow(r) {
             success: function () {
                 document.getElementById("event-table").deleteRow(i.rowIndex);
             },
-            error: function () {
-                alert('An error occured while processing your request');
-            }
+            // error: function () {
+            //     alert('An error occured while processing your request');
+            // }
         });
     } else {
         return;
@@ -218,16 +199,16 @@ function bind_editable_to_column(table_selector, column_selector, title, options
             type: 'PUT',
             dataType: 'json'
         },
-        //source: options
+        source: options
     });
 }
 
 
 
 function bind_editable_to_event_column(table_selector, column_selector, title, options) {
-    options = typeof options !== 'undefined' ? options : ''; //assigning source to empty when not specified. source is only used for select.
+    options = typeof options !== 'undefined' ? options : '';
     $(table_selector).editable({
-        params: function (params) { //params already contain `name`, `value` and `pk`
+        params: function (params) {
             var data = {};
             data['id'] = params.pk;
             data[title] = params.value;
@@ -237,7 +218,6 @@ function bind_editable_to_event_column(table_selector, column_selector, title, o
         type: 'date',
         format: 'mm-dd-yy',
         viewformat: 'mm-dd-yy',
-        //inputclass: "datepick",
         placement: function (context, source) {
             var popupWidth = 336;
             if (($(window).scrollLeft() + popupWidth) > $(source).offset().left) {
@@ -256,31 +236,12 @@ function bind_editable_to_event_column(table_selector, column_selector, title, o
             type: 'PUT',
             dataType: 'json'
         },
-        //source: options
+        source: options
     });
 }
 
-// DATE
-/*
-function initDatePicker() {
-var date_input=$('.date');
-      var container=$('#events').length>0 ? $('#events').parent() : "body";
-      var options={
-        format: 'mm/dd/yy',
-        viewformat: 'mm/dd/yy',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-        //orientation: 'top'
-      };
-      date_input.datepicker(options);
-      //date_input.datepicker();
-};
-*/
+
 // GET USER EVENTS ON LOGIN
-
-
-
 
 function getEvents(callbackFn) {
     $.ajax({
@@ -290,17 +251,16 @@ function getEvents(callbackFn) {
             id: this.id
         },
         success: function (data) {
-            console.log(data);
             var data = data.events;
             for (index in data)
-                callbackFn(data[index]);
+                callbackFn(data[index])
         },
-        //error:
+        error: function(err) {
+            alert('There was an error fetching your events', err)
+        }
     });
 };
 
-//<a href="#" class="eventDate date" data-type="date" data-url="/api/event/${data.id}" data-pk="${data.id}">${data.eventDate}</a>
-//<input type="text" id="${data.id}" class="form-control eventDate" placeholder="${data.eventDate}">
 function displayEventItem(data) {
     $('#event-table-body').append(
         `<tr id="${data.id}">
@@ -353,14 +313,12 @@ function displayEvents(data) {
 };
 
 function bindEditableToEventTable() {
-    //bind_editable_to_column('#event-table', 'tr td a.eventDate', 'eventDate');
     bind_editable_to_event_column('#event-table', 'tr td a.eventDate', 'eventDate');
     bind_editable_to_column('#event-table', 'tr td a.venueName', 'venueName');
     bind_editable_to_column('#event-table', 'tr td a.venueAddress', 'venueAddress');
     bind_editable_to_column('#event-table', 'tr td a.startTime', 'startTime');
     bind_editable_to_column('#event-table', 'tr td a.soundCheckTime', 'soundCheckTime');
 };
-
 
 function bindEditableToManifestTable() {
     bind_editable_to_column('#manifest-table', 'tr td a.event', 'event');
@@ -370,14 +328,10 @@ function bindEditableToManifestTable() {
     bind_editable_to_column('#manifest-table', 'tr td a.dIs', 'manifest.dIs');
 };
 
-
-
-
 function getAndDisplayEvents() {
     getEvents(displayEvents);
 
 };
-
 
 
 // GET STAGE PLOT AT LOGIN
@@ -387,13 +341,13 @@ function getStagePlots(callbackFn) {
         type: "GET",
         url: '/api/stage-plot',
         success: function (data) {
-            console.log(data);
-            callbackFn(data);
+            callbackFn(data)
         },
-        //error:
+        error: function(err) {
+            alert('There was an error fetching your stage plots')
+        }
     });
 }
-
 
 function displayStagePlots(data) {
     $('#stage-plot-table-body').empty();
@@ -421,9 +375,6 @@ Dropzone.options.uploadPlot = {
     dictCancelUpload: 'Cancel',
     dictCancelUploadConfirmation: 'Upload Cancelled',
     dictRemoveFile: 'Delete',
-    headers: {
-        //'x-csrf-token': document.querySelectorAll('meta[name=csrf-token]')[0].getAttributeNode('content').value,
-    },
     acceptedFiles: 'image/*',
     init: function () {
         this.on('success', function (file, resp) {
@@ -449,13 +400,9 @@ Dropzone.options.uploadPlot = {
     }
 };
 
-
-
-const greeting = function () {
-    $('#dashboard-greeting').append(`Hello ${res.user.userName}`);
-};
-
-
+// const greeting = function () {
+//     $('#dashboard-greeting').append(`Hello ${res.user.userName}`);
+// };
 
 function deleteStagePlot() {
     $('#stage-plot').on('click', '.del-plot', function () {
@@ -481,7 +428,6 @@ function deleteStagePlot() {
         };
     });
 };
-
 
 // EVENT LISTENERS
 
@@ -514,19 +460,16 @@ function cancelNewEvent() {
 
 function renderNewEvent() {
     $('.btn-save-event').on('click', function () {
-        console.log(NEW_EVENT);
         saveNewEvent();
         QUESTIONS.currentQuestion = 0;
         $('.btn-guide-next').removeClass('hide');
         $('.btn-save-event').addClass('hide');
         $('#eventGuideModal').modal('hide');
-        //NEW_EVENT = {};
     });
 }
 
 function handleQty() {
     $(".up-down-btn").on("click", function () {
-
         var $button = $(this);
         var oldValue = $button.parent().find(".qty-input").val();
 
@@ -540,19 +483,14 @@ function handleQty() {
                 newVal = 0;
             }
         }
-
         $button.parent().find(".qty-input").val(newVal);
-
     });
 };
 
 $(document).ready(function () {
     bindEditableToEventTable();
     bindEditableToManifestTable();
-    //greeting();
     getAndDisplayEvents();
-
-    //initDatePicker();
     getAndDisplayStagePlots();
     deleteStagePlot();
     renderFirstQuestion();

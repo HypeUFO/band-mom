@@ -29,7 +29,7 @@
                     <!-- Icon for navbar button when in small mode -->
                     <span class="glyphicon glyphicon-align-justify"></span>
                 </button>
-                <img src="images/bm-logo-2.jpeg" id="bmLogo" class="img-circle pull-left" alt="Band Mom Logo">
+                <img src="images/bm-logo-2-color.jpg" id="bmLogo" class="img-circle pull-left" alt="Band Mom Logo">
                 <span id="websiteTitle" class="pull-left">Band Mom</span>
                 <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
                     <!--<button type="button" class="link btn-logout">log out</button>-->
@@ -75,7 +75,7 @@
                             <!-- Button HTML (to Trigger Modal) -->
                             <a href="#eventGuideModal" role="button" class="btn btn-primary btn-lg add-event-btn btn-guide-start" data-toggle="modal">Create Event</a>
                             <!-- Modal HTML -->
-                            <div id="eventGuideModal" class="modal fade">
+                            <div id="eventGuideModal" class="modal fade col-sm-12">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -99,54 +99,38 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="stage-plot">
-
                     <table class="table table-hover" id="stage-plot-table">
-                               <!-- <thead>
-                                    <tr>
-                                        <th class="col-md-10 col-md-offset-1 text-center"></td>
-                                    </tr>
-                                </thead>-->
-                                <tbody id="stage-plot-table-body">
-                                </tbody>
-                                <tfoot>
-                                    <tr><td><h2>Upload your stage plot</h2></td></tr>
-                        <tr><td><a href="#upload-plot-modal" role="button" class="btn btn-primary btn-lg upload-btn" data-toggle="modal">Upload</a></td></tr>
-                        <tr><td><h4>Don't have a stage plot? You can create one for free <a href="http://www.bosstweedbackline.com/stage-designer/"
+                        <tbody id="stage-plot-table-body">
+                        </tbody>
+                        <tfoot>
+                            <tr><td><h2>Upload your stage plot</h2></td></tr>
+                            <tr><td><a href="#upload-plot-modal" role="button" class="btn btn-primary btn-lg upload-btn" data-toggle="modal">Upload</a></td></tr>
+                            <tr><td><h4>Don't have a stage plot? You can create one for free <a href="http://www.bosstweedbackline.com/stage-designer/"
                             target="_blank">here</a></h4></td></tr>
-                                </tfoot>
-                            </table>
-
-                    <!--<div id="stage-plot-img-container"></div>
-                    <div id="upload-plot-container">
-                        <h2>Upload your stage plot</h2>
-                        <a href="#upload-plot-modal" role="button" class="btn btn-primary btn-lg upload-btn" data-toggle="modal">Upload</a>
-                        <h4>Don't have a stage plot? You can create one for free <a href="http://www.bosstweedbackline.com/stage-designer/"
-                            target="_blank">here</a></h4>
-                </div>-->
-                    
-                    </div>
-                    <div id="upload-plot-modal" class="modal fade col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-s-12 col-xs-12">
-                        <div class="modal-dialog col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-s-12 col-xs-12">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title">Upload Stage Plot</h3>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                </div>
-                                <div class="modal-body plot-modal-body">
-                                   <form action="/api/stage-plot" class="dropzone" id="upload-plot" name="uploadPlot" enctype="multipart/form-data">
-                                        <div class="fallback">
-                                            <input name="stagePlot" type="file" multiple />
-                                        </div>
-                                        </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default btn-cancel-plot" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-primary btn-done-plot hide">Done</button>
-                                </div>
+                        </tfoot>
+                    </table>
+                </div>
+                <div id="upload-plot-modal" class="modal fade col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-s-12 col-xs-12">
+                    <div class="modal-dialog col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-s-12 col-xs-12">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Upload Stage Plot</h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body plot-modal-body">
+                                <form action="/api/stage-plot" class="dropzone" id="upload-plot" name="uploadPlot" enctype="multipart/form-data">
+                                    <div class="fallback">
+                                        <input name="stagePlot" type="file" multiple />
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-cancel-plot" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary btn-done-plot hide">Done</button>
                             </div>
                         </div>
                     </div>
-                    
+                </div>
                 <div class="tab-pane" id="list">
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover toggle-arrow-alt" id="manifest-table">
@@ -169,7 +153,7 @@
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js"></script>
     <script src="vendor/dropzone-4.3.0/dist/dropzone.js"></script>
