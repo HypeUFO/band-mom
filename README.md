@@ -24,5 +24,6 @@ This is v1 of BandMom. Future updates will add:
 
   * User defined alerts (day of show, time to leave, etc)
   * Venue address will link to google maps for fast directions
+  * Ability to create a public profile including band name, bio, song upload or connect to soundcloud
   * The option to sign-up as a band, venue, or promoter, turning the app into a marketplace where users can connect and book events
   * In app messaging between bands, venues, and promoters
