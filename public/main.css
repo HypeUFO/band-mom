@@ -163,16 +163,6 @@ h5 {
     padding: 50px;
 }
 
-#stage-plot-img {
-    margin-bottom: 12px;
-}
-
-#inputFileToLoad {
-    margin: auto;
-    padding: 10px;
-    font-size: 12px;
-}
-
 .table {
     font-size: 18px;
 }
@@ -267,4 +257,9 @@ table#stage-plot-table,
 table#stage-plot-table td
 {
     border: none !important;
+}
+
+.dz-message {
+    font-size: 18px;
+
 }
