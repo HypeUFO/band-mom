@@ -355,7 +355,7 @@ function displayStagePlots(data) {
         $('#stage-plot-table-body').prepend(
             `<tr><td class="img-wrap">
                 <span class="del-plot close">&times;</span>
-                <img src="/stage-plots/${stagePlot.img}" id="${stagePlot.id}" name="${stagePlot.img}"class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
+                <img src="/stage-plots/${stagePlot.img}" id="${stagePlot.id}" name="${stagePlot.img}"class="stage-plot-img col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-s-10 col-s-offset-1 col-xs-12">
             </td></tr>`
         );
     };
