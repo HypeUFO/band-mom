@@ -23,6 +23,6 @@ An API to access the database has been constructed in ExpressJS with 3 key endpo
 This is v1 of BandMom. Future updates will add:
 
   * User defined alerts (day of show, time to leave, etc)
-  * Venue Address will have click-able link to google maps for fast directions
+  * Venue address will link to google maps for fast directions
   * The option to sign-up as a band, venue, or promoter, turning the app into a marketplace where users can connect and book events
   * In app messaging between bands, venues, and promoters
