@@ -9,6 +9,7 @@ Let's be honest, musicians are not known for being organized. From load in time 
 
 ## UX
 
+![Homepage Mobile](https://cloud.githubusercontent.com/assets/18637588/23318215/5a1df768-fa86-11e6-81f7-eb4818b43c9f.png)
 
 This app was designed to project a feeling of security and relaxation to it's users. The stress involved in keeping track of all the little things that go into planning a gig can quickly take the fun out of performing. Everything from the color scheme to the images are meant to inspire feelings of confidence and ease, so users can focus on doing what they love.
 The dashboard page contains 3 tabs for users to keep track of event details, store their stage plot, and a list of items to commonly forgotten items to bring/purchase before the show. 
