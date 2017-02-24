@@ -22,7 +22,7 @@ You can find a working prototype here: https://band-mom.herokuapp.com/index.html
 Log in with username: demo password: demo123 to try it out!
 
 ## Technical
-BandMom is built with node.js on the back end and jQuery on the front-end. Bootstrap has been used for styling and datepickers. FooTable allows for the collapsing tables on mobile devices while X-Editable is used for inline editing of table cells.
+Band Mom is built with node.js on the back end and jQuery on the front-end. Bootstrap has been used for styling and datepickers. FooTable allows for the collapsing tables on mobile devices while X-Editable is used for inline editing of table cells.
 An API to access the database has been constructed in ExpressJS with 3 key endpoints, returning user info, events, and stage plots
 
 ## Future Updates
