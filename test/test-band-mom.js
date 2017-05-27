@@ -33,7 +33,6 @@ let _user;
 // Seed events Collection
 
 function seedEventData(user) {
-  
   console.info('seeding event data');
   const seedData = [];
 
@@ -82,27 +81,20 @@ function generateEventData(user) {
     dateCreated: new Date(),
     dateModified: new Date(),
     userId: user.userId
-      //userId: "58a3d943a1ddb1203c7780a7"
   };
 };
 
 // Seed stageplots Collection
 
-function seedPlotData() {
+function seedPlotData(user) {
 
   console.info('seeding stage-plot data');
-  // const seedData = [];
   const testImage = {
     img: 'stage-plot.jpg',
-    //dateCreated: new Date,
-    //dateModified: new Date,
-    userId: this.id
+    dateCreated: new Date,
+    dateModified: new Date,
+    userId: user.userId
   }
-
-  // for (let i = 1; i <= 2; i++) {
-  //     seedData.push(generateEventData());
-  // }
-  //return StagePlot.insertMany(testImage);
   return agent
     .post('/api/stage-plot')
     .send(testImage)
