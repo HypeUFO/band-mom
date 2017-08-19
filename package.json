@@ -17,6 +17,9 @@
     "url": "https://github.com/HypeUFO/band-mom/issues"
   },
   "homepage": "https://github.com/HypeUFO/band-mom#readme",
+  "engines": {
+    "node": "8.1.4"
+  },
   "dependencies": {
     "bcrypt-nodejs-as-promised": "^1.0.4",
     "bcryptjs": "^2.4.0",
