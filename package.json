@@ -1,7 +1,7 @@
 {
-  "name": "capstone-2",
+  "name": "band-mom",
   "version": "1.0.0",
-  "description": "capstone 2 for Thinkful fullstack program. App for bands to organize gigs. Either called \"Band Mom\" or \"Roadie\"",
+  "description": "Virtual Tour Manager for musicians",
   "main": "app.js",
   "scripts": {
     "test": "mocha",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HypeUFO/capstone-2.git"
+    "url": "git+https://github.com/HypeUFO/band-mom.git"
   },
   "author": "Michael Maio",
   "license": "ISC",
